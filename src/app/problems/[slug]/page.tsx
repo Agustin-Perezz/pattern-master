@@ -6,8 +6,12 @@ import { ProblemTopNav } from "../components/ProblemTopNav";
 import { getChallengeBySlug, getChallengeSlugs } from "./actions";
 
 export async function generateStaticParams() {
-  const slugs = await getChallengeSlugs();
-  return slugs.map((slug) => ({ slug }));
+  try {
+    const slugs = await getChallengeSlugs();
+    return slugs.map((slug) => ({ slug }));
+  } catch {
+    return [];
+  }
 }
 
 export const dynamicParams = true;
