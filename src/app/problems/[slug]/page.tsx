@@ -1,14 +1,16 @@
 import { notFound } from "next/navigation";
 
-import { getProblem, PROBLEMS } from "@/lib/mock/problems";
-
 import { CodeEditor } from "../components/CodeEditor";
 import { ProblemLeftPane } from "../components/ProblemLeftPane";
 import { ProblemTopNav } from "../components/ProblemTopNav";
+import { getChallengeBySlug, getChallengeSlugs } from "./actions";
 
-export function generateStaticParams() {
-  return PROBLEMS.map((problem) => ({ slug: problem.slug }));
+export async function generateStaticParams() {
+  const slugs = await getChallengeSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
+
+export const dynamicParams = true;
 
 type ProblemPageProps = {
   params: Promise<{ slug: string }>;
@@ -16,18 +18,18 @@ type ProblemPageProps = {
 
 export default async function ProblemPage({ params }: ProblemPageProps) {
   const { slug } = await params;
-  const problem = getProblem(slug);
+  const result = await getChallengeBySlug(slug);
 
-  if (!problem) {
+  if (!result.found) {
     notFound();
   }
 
   return (
     <div className="flex h-dvh flex-col overflow-hidden bg-canvas">
-      <ProblemTopNav subtitle={problem.challenge} />
+      <ProblemTopNav subtitle={result.challenge.challenge} />
       <main className="flex min-h-0 flex-1 flex-col md:flex-row">
-        <ProblemLeftPane problem={problem} />
-        <CodeEditor problem={problem} />
+        <ProblemLeftPane problem={result.challenge} />
+        <CodeEditor problem={result.challenge} />
       </main>
     </div>
   );
