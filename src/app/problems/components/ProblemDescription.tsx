@@ -1,12 +1,12 @@
 import { Badge } from "@/components/opencode/badge";
-import type { Problem } from "@/lib/mock/problems";
+import type { ChallengeProps } from "@/domain/entities/challenge.entity";
 
 import { CodeBlock } from "./CodeBlock";
 
 const PROBLEM_TAG = "[ problem ]";
 
 type ProblemDescriptionProps = {
-  problem: Problem;
+  problem: ChallengeProps;
 };
 
 export function ProblemDescription({ problem }: ProblemDescriptionProps) {

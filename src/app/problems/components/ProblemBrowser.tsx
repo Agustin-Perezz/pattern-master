@@ -1,6 +1,12 @@
+import type { ChallengeProps } from "@/domain/entities/challenge.entity";
+
 import { ProblemBrowserResults } from "./ProblemBrowserResults";
 
-export function ProblemBrowser() {
+type ProblemBrowserProps = {
+  initialChallenges: ChallengeProps[];
+};
+
+export function ProblemBrowser({ initialChallenges }: ProblemBrowserProps) {
   return (
     <div className="mx-auto flex w-full max-w-[960px] flex-col gap-[32px] px-[16px] py-[40px] md:px-[24px] md:py-[56px]">
       <header className="flex flex-col gap-[12px]">
@@ -15,7 +21,7 @@ export function ProblemBrowser() {
           drops you into an editor with a failing starter and an AI reviewer.
         </p>
       </header>
-      <ProblemBrowserResults />
+      <ProblemBrowserResults initialChallenges={initialChallenges} />
     </div>
   );
 }

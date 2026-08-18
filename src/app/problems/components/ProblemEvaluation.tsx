@@ -1,4 +1,4 @@
-import type { Problem } from "@/lib/mock/problems";
+import type { ChallengeProps } from "@/domain/entities/challenge.entity";
 
 import { FeedbackCard } from "./FeedbackCard";
 import { ScoreDial } from "./ScoreDial";
@@ -6,7 +6,7 @@ import { ScoreDial } from "./ScoreDial";
 const SCORE_VALUE = 85;
 
 type ProblemEvaluationProps = {
-  problem: Problem;
+  problem: ChallengeProps;
 };
 
 export function ProblemEvaluation({ problem }: ProblemEvaluationProps) {
