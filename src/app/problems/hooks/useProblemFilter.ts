@@ -11,13 +11,16 @@ export const FILTERS = [
 
 export type Filter = (typeof FILTERS)[number];
 
+const ALL_FILTER: Filter = "All";
+
 export function useProblemFilter(initialChallenges: ChallengeProps[]) {
-  const [filter, setFilter] = React.useState<Filter>("All");
+  const [filter, setFilter] = React.useState<Filter>(ALL_FILTER);
   const [query, setQuery] = React.useState("");
 
   const normalizedQuery = query.trim().toLowerCase();
   const visible = initialChallenges.filter((challenge: ChallengeProps) => {
-    const matchesCategory = filter === "All" || challenge.category === filter;
+    const matchesCategory =
+      filter === ALL_FILTER || challenge.category === filter;
     const matchesQuery =
       normalizedQuery === "" ||
       challenge.title.toLowerCase().includes(normalizedQuery) ||
