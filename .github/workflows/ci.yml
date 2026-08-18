@@ -86,7 +86,7 @@ jobs:
       - name: Setup Supabase CLI
         uses: supabase/setup-cli@v3
         with:
-          version: latest
+          version: 2.115.0
       - name: Start Supabase
         run: supabase start -x imgproxy,edge-runtime,logflare,vector,supavisor
       - name: Reset database with migrations

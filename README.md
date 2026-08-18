@@ -1,7 +1,7 @@
 # next-supabase-scaffold
 
-[![Quality gate status](https://sonarcloud.io/api/project_badges/measure?project=Agustin-Perezz_next-supabase-scaffold&metric=alert_status&token=488d382bfa2f8608447379c0b9438ba29f899556)](https://sonarcloud.io/summary/new_code?id=Agustin-Perezz_next-supabase-scaffold)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Agustin-Perezz_next-supabase-scaffold&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Agustin-Perezz_next-supabase-scaffold)
+[![Quality gate status](https://sonarcloud.io/api/project_badges/measure?project=Agustin-Perezz_pattern-master&metric=alert_status&token=488d382bfa2f8608447379c0b9438ba29f899556)](https://sonarcloud.io/summary/new_code?id=Agustin-Perezz_pattern-master)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Agustin-Perezz_pattern-master&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Agustin-Perezz_pattern-master)
 
 A production-ready [Next.js](https://nextjs.org) starter built on Clean Architecture with strict layering. Domain entities and Zod invariant schemas sit at the core. Application use cases depend only on repository interfaces. Infrastructure provides Supabase-backed implementations. The App Router delivery layer composes per-request DI containers, not module-level singletons. Dependencies point inward toward the domain, so framework and I/O concerns stay at the edges. The scaffold takes a shift-left approach to quality: linting, type checking, static analysis, and E2E tests run on every push and pull request. This makes issues surface as early as possible in the development cycle.
 
@@ -347,7 +347,7 @@ Configure these in **Settings → Secrets and variables → Actions**.
 
 Coverage and code quality are enforced as early as possible (shift-left):
 
-1. **IDE — SonarLint Connected Mode.** Install the SonarLint extension (VS Code / JetBrains). Bind it to SonarCloud organization `general-organization`, project `Agustin-Perezz_next-supabase-scaffold`. This syncs the quality profile and surfaces issues in-editor before commit, in agreement with CI.
+1. **IDE — SonarLint Connected Mode.** Install the SonarLint extension (VS Code / JetBrains). Bind it to SonarCloud organization `general-organization`, project `Agustin-Perezz_pattern-master`. This syncs the quality profile and surfaces issues in-editor before commit, in agreement with CI.
 2. **Pre-push — unit tests.** The Husky `pre-push` hook runs `pnpm test:unit` before the slower E2E suite, so pure-logic regressions fail fast locally.
 3. **PR — analysis + decoration.** The `sonar` job runs on every PR. It posts the Quality Gate status and inline issue comments to the PR (PR decoration, enabled by the job's `pull-requests: write` permission). It reports only *new* issues introduced by the PR.
 4. **Merge gate — required check.** In **Settings → Branches → Branch protection rules** for `main`, add the **"SonarCloud Code Analysis"** check as a *required* status check so a failing Quality Gate blocks the merge.
