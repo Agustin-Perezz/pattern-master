@@ -25,3 +25,4 @@ create policy "Anyone can read challenges"
   using (true);
 
 grant select on public.challenges to anon, authenticated;
+grant select on public.challenges to service_role;
