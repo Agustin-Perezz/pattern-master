@@ -2,17 +2,24 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 import { Badge } from "@/components/opencode/badge";
-import type { Problem, ProblemDifficulty } from "@/lib/mock/problems";
+import type { ChallengeProps } from "@/domain/entities/challenge.entity";
+import { Difficulty } from "@/domain/entities/difficulty.enum";
 
 type ProblemCardProps = {
-  problem: Problem;
+  problem: ChallengeProps;
 };
 
 function difficultyVariant(
-  difficulty: ProblemDifficulty,
+  difficulty: Difficulty,
 ): "success" | "warning" | "danger" {
-  if (difficulty === "Easy") return "success";
-  if (difficulty === "Medium") return "warning";
+  if (difficulty === Difficulty.Easy) {
+    return "success";
+  }
+
+  if (difficulty === Difficulty.Medium) {
+    return "warning";
+  }
+
   return "danger";
 }
 

@@ -1,12 +1,12 @@
 import { Play, RotateCcw } from "lucide-react";
 
 import { Button } from "@/components/opencode/button";
-import type { Problem } from "@/lib/mock/problems";
+import type { ChallengeProps } from "@/domain/entities/challenge.entity";
 
 import { CodeEditorBody } from "./CodeEditorBody";
 
 type CodeEditorProps = {
-  problem: Problem;
+  problem: ChallengeProps;
 };
 
 export function CodeEditor({ problem }: CodeEditorProps) {

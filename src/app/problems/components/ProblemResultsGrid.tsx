@@ -1,10 +1,10 @@
-import type { Problem } from "@/lib/mock/problems";
+import type { ChallengeProps } from "@/domain/entities/challenge.entity";
 
 import type { Filter } from "../hooks/useProblemFilter";
 import { ProblemCard } from "./ProblemCard";
 
 type ProblemResultsGridProps = {
-  problems: Problem[];
+  problems: ChallengeProps[];
   filter: Filter;
 };
 

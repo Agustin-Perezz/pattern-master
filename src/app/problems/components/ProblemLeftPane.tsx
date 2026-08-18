@@ -1,11 +1,11 @@
-import type { Problem } from "@/lib/mock/problems";
+import type { ChallengeProps } from "@/domain/entities/challenge.entity";
 
 import { ProblemDescription } from "./ProblemDescription";
 import { ProblemEvaluation } from "./ProblemEvaluation";
 import { ProblemTabs } from "./ProblemTabs";
 
 type ProblemLeftPaneProps = {
-  problem: Problem;
+  problem: ChallengeProps;
 };
 
 export function ProblemLeftPane({ problem }: ProblemLeftPaneProps) {
