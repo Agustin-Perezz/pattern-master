@@ -29,19 +29,21 @@ export function MagicLinkForm() {
   const [state, formAction] = useActionState(signInWithMagicLinkAction, {});
 
   return (
-    <form action={formAction} className="space-y-4">
+    <form action={formAction} className="flex flex-col gap-[16px]">
       {state.success && (
-        <p className="rounded-lg border border-green-200 bg-green-50 p-4 text-sm text-green-800 dark:border-green-800 dark:bg-green-950 dark:text-green-200">
+        <p className="rounded-sm border border-success bg-transparent p-[12px] font-mono text-[14px] text-success">
           {state.success}
         </p>
       )}
       {state.error && (
-        <p className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800 dark:border-red-800 dark:bg-red-950 dark:text-red-200">
+        <p className="rounded-sm border border-danger bg-transparent p-[12px] font-mono text-[14px] text-danger">
           {state.error}
         </p>
       )}
-      <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
+      <div className="flex flex-col gap-[8px]">
+        <Label htmlFor="email" className="font-mono text-[14px] text-mute">
+          Email
+        </Label>
         <Input
           id="email"
           name="email"

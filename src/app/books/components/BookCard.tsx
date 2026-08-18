@@ -7,14 +7,14 @@ type BookCardProps = {
 export function BookCard({ book }: BookCardProps) {
   return (
     <li
-      className="flex items-center justify-between px-4 py-3"
+      className="flex items-center justify-between px-[16px] py-[12px] font-mono"
       data-testid="book-card"
     >
       <div>
-        <p className="font-medium" data-testid="book-card-title">
+        <p className="text-[16px] text-ink" data-testid="book-card-title">
           {book.title}
         </p>
-        <p className="text-sm text-zinc-500" data-testid="book-card-author">
+        <p className="text-[14px] text-mute" data-testid="book-card-author">
           {book.author}
         </p>
       </div>
