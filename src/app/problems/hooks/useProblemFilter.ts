@@ -13,12 +13,13 @@ export type Filter = (typeof FILTERS)[number];
 
 const ALL_FILTER: Filter = "All";
 
-export function useProblemFilter(initialChallenges: ChallengeProps[]) {
-  const [filter, setFilter] = React.useState<Filter>(ALL_FILTER);
-  const [query, setQuery] = React.useState("");
-
+export function filterChallenges(
+  challenges: ChallengeProps[],
+  filter: Filter,
+  query: string,
+): ChallengeProps[] {
   const normalizedQuery = query.trim().toLowerCase();
-  const visible = initialChallenges.filter((challenge: ChallengeProps) => {
+  return challenges.filter((challenge: ChallengeProps) => {
     const matchesCategory =
       filter === ALL_FILTER || challenge.category === filter;
     const matchesQuery =
@@ -28,6 +29,13 @@ export function useProblemFilter(initialChallenges: ChallengeProps[]) {
       challenge.challenge.toLowerCase().includes(normalizedQuery);
     return matchesCategory && matchesQuery;
   });
+}
+
+export function useProblemFilter(initialChallenges: ChallengeProps[]) {
+  const [filter, setFilter] = React.useState<Filter>(ALL_FILTER);
+  const [query, setQuery] = React.useState("");
+
+  const visible = filterChallenges(initialChallenges, filter, query);
 
   return { filter, setFilter, query, setQuery, visible };
 }
