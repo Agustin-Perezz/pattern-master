@@ -30,6 +30,119 @@ export type Database = {
         }
         Relationships: []
       }
+      challenges: {
+        Row: {
+          category: string
+          challenge: string
+          created_at: string
+          description: string
+          description_code: string | null
+          difficulty: Database["public"]["Enums"]["difficulty_enum"]
+          editor_code: string
+          editor_file: string
+          slug: string
+          starter_code: string
+          starter_file: string
+          summary: string
+          title: string
+        }
+        Insert: {
+          category: string
+          challenge: string
+          created_at?: string
+          description: string
+          description_code?: string | null
+          difficulty: Database["public"]["Enums"]["difficulty_enum"]
+          editor_code: string
+          editor_file: string
+          slug: string
+          starter_code: string
+          starter_file: string
+          summary: string
+          title: string
+        }
+        Update: {
+          category?: string
+          challenge?: string
+          created_at?: string
+          description?: string
+          description_code?: string | null
+          difficulty?: Database["public"]["Enums"]["difficulty_enum"]
+          editor_code?: string
+          editor_file?: string
+          slug?: string
+          starter_code?: string
+          starter_file?: string
+          summary?: string
+          title?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          auth_user_id: string
+          created_at: string
+          id: string
+          streak_count: number
+          username: string | null
+        }
+        Insert: {
+          auth_user_id: string
+          created_at?: string
+          id?: string
+          streak_count?: number
+          username?: string | null
+        }
+        Update: {
+          auth_user_id?: string
+          created_at?: string
+          id?: string
+          streak_count?: number
+          username?: string | null
+        }
+        Relationships: []
+      }
+      submissions: {
+        Row: {
+          challenge_slug: string
+          created_at: string
+          feedback_json: Json
+          id: string
+          pattern_applied: boolean
+          score: number
+          submitted_code: string
+          user_id: string
+        }
+        Insert: {
+          challenge_slug: string
+          created_at?: string
+          feedback_json: Json
+          id?: string
+          pattern_applied: boolean
+          score: number
+          submitted_code: string
+          user_id: string
+        }
+        Update: {
+          challenge_slug?: string
+          created_at?: string
+          feedback_json?: Json
+          id?: string
+          pattern_applied?: boolean
+          score?: number
+          submitted_code?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "submissions_challenge_slug_fkey"
+            columns: ["challenge_slug"]
+            isOneToOne: false
+            referencedRelation: "challenges"
+            referencedColumns: ["slug"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -38,7 +151,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      difficulty_enum: "Easy" | "Medium" | "Hard"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -165,7 +278,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      difficulty_enum: ["Easy", "Medium", "Hard"],
+    },
   },
 } as const
 
