@@ -4,9 +4,6 @@ import type { Challenge } from "@/domain/entities/challenge.entity";
 import type { Database } from "../../database.types";
 import { challengeMapper } from "../../mappers/challenge.mapper";
 
-const CHALLENGES_TABLE = "challenges";
-const SLUG_COLUMN = "slug";
-
 export class SupabaseGetChallengeBySlugRepository
   implements GetChallengeBySlugRepository
 {
@@ -14,9 +11,9 @@ export class SupabaseGetChallengeBySlugRepository
 
   async findBySlug(slug: string): Promise<Challenge | null> {
     const { data, error } = await this.supabase
-      .from(CHALLENGES_TABLE)
+      .from("challenges")
       .select("*")
-      .eq(SLUG_COLUMN, slug)
+      .eq("slug", slug)
       .single();
 
     if (error || data === null) {

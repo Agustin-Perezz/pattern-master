@@ -4,9 +4,6 @@ import type { Challenge } from "@/domain/entities/challenge.entity";
 import type { Database } from "../../database.types";
 import { challengeMapper } from "../../mappers/challenge.mapper";
 
-const CHALLENGES_TABLE = "challenges";
-const ORDER_COLUMN = "created_at";
-
 export class SupabaseGetChallengesRepository
   implements GetChallengesRepository
 {
@@ -14,9 +11,9 @@ export class SupabaseGetChallengesRepository
 
   async findAll(): Promise<Challenge[]> {
     const { data, error } = await this.supabase
-      .from(CHALLENGES_TABLE)
+      .from("challenges")
       .select("*")
-      .order(ORDER_COLUMN, { ascending: false });
+      .order("created_at", { ascending: false });
 
     if (error) {
       throw new Error(`Failed to fetch challenges: ${error.message}`);
