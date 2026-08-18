@@ -3,15 +3,13 @@ import { Play, RotateCcw } from "lucide-react";
 import { Button } from "@/components/opencode/button";
 import type { Problem } from "@/lib/mock/problems";
 
-import { highlight } from "./CodeHighlight";
+import { CodeEditorBody } from "./CodeEditorBody";
 
 type CodeEditorProps = {
   problem: Problem;
 };
 
 export function CodeEditor({ problem }: CodeEditorProps) {
-  const lines = problem.editorCode.split("\n");
-
   return (
     <section
       aria-label="Code editor"
@@ -24,22 +22,7 @@ export function CodeEditor({ problem }: CodeEditorProps) {
         </span>
       </div>
 
-      <div className="min-h-0 flex-1 overflow-auto">
-        <div className="flex min-h-full font-mono text-[14px] leading-[1.7]">
-          <div
-            aria-hidden
-            className="select-none border-r border-surface-dark-elevated px-[12px] py-[16px] text-right text-on-dark-mute"
-          >
-            {lines.map((_line: string, index: number) => (
-              // biome-ignore lint/suspicious/noArrayIndexKey: line numbers are stable for a static file
-              <div key={`line-number-${index}`}>{index + 1}</div>
-            ))}
-          </div>
-          <pre className="flex-1 overflow-x-auto px-[16px] py-[16px] text-on-dark">
-            <code>{highlight(problem.editorCode)}</code>
-          </pre>
-        </div>
-      </div>
+      <CodeEditorBody code={problem.editorCode} />
 
       <div className="flex shrink-0 items-center justify-end gap-[12px] border-t border-surface-dark-elevated px-[16px] py-[12px]">
         <Button variant="secondary">
