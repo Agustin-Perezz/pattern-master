@@ -1,0 +1,81 @@
+"use client";
+
+import type { OnMount } from "@monaco-editor/react";
+import dynamic from "next/dynamic";
+import * as React from "react";
+
+const Monaco = dynamic(() => import("@monaco-editor/react"), { ssr: false });
+
+const MONACO_THEME = "opencode-dark";
+
+const MONACO_THEME_DEFINITION = {
+  base: "vs-dark" as const,
+  inherit: true,
+  rules: [
+    { token: "comment", foreground: "9a9898", fontStyle: "italic" },
+    { token: "keyword", foreground: "f4f2f2" },
+    { token: "string", foreground: "c8b6a0" },
+    { token: "number", foreground: "d4a373" },
+    { token: "type", foreground: "e8e0d8" },
+    { token: "function", foreground: "f4f2f2" },
+    { token: "identifier", foreground: "f4f2f2" },
+  ],
+  colors: {
+    "editor.background": "#201d1d",
+    "editor.foreground": "#f4f2f2",
+    "editorLineNumber.foreground": "#6e6e73",
+    "editorLineNumber.activeForeground": "#f4f2f2",
+    "editor.selectionBackground": "#302c2c",
+    "editor.lineHighlightBackground": "#262222",
+    "editorCursor.foreground": "#f4f2f2",
+    "editorWhitespace.foreground": "rgba(244,242,242,0.08)",
+    "editorIndentGuide.background": "rgba(244,242,242,0.08)",
+    "editorIndentGuide.activeBackground": "rgba(244,242,242,0.15)",
+    "editorGutter.background": "#201d1d",
+    "editorWidget.background": "#262222",
+    "editorWidget.border": "rgba(244,242,242,0.12)",
+    "editorSuggestWidget.background": "#262222",
+    "editorSuggestWidget.selectedBackground": "#302c2c",
+    "scrollbarSlider.background": "rgba(244,242,242,0.08)",
+    "scrollbarSlider.hoverBackground": "rgba(244,242,242,0.15)",
+  },
+};
+
+export type MonacoEditorProps = {
+  initialCode: string;
+  onChange: (code: string) => void;
+};
+
+export function MonacoEditor({ initialCode, onChange }: MonacoEditorProps) {
+  const [code, setCode] = React.useState(initialCode);
+
+  React.useEffect(() => {
+    setCode(initialCode);
+  }, [initialCode]);
+
+  const handleChange = React.useCallback(
+    (value: string | undefined) => {
+      const next = value ?? "";
+      setCode(next);
+      onChange(next);
+    },
+    [onChange],
+  );
+
+  const handleMount: OnMount = React.useCallback((_editor, monaco) => {
+    monaco.editor.defineTheme(MONACO_THEME, MONACO_THEME_DEFINITION);
+    monaco.editor.setTheme(MONACO_THEME);
+  }, []);
+
+  return (
+    <Monaco
+      height="100%"
+      defaultLanguage="typescript"
+      value={code}
+      onChange={handleChange}
+      onMount={handleMount}
+      theme={MONACO_THEME}
+      options={{ editContext: false, minimap: { enabled: false } }}
+    />
+  );
+}
