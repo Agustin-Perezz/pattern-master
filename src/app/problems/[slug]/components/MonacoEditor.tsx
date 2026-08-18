@@ -1,6 +1,6 @@
 "use client";
 
-import type { OnMount } from "@monaco-editor/react";
+import type { BeforeMount } from "@monaco-editor/react";
 import dynamic from "next/dynamic";
 import * as React from "react";
 
@@ -62,9 +62,8 @@ export function MonacoEditor({ initialCode, onChange }: MonacoEditorProps) {
     [onChange],
   );
 
-  const handleMount: OnMount = React.useCallback((_editor, monaco) => {
+  const handleBeforeMount: BeforeMount = React.useCallback((monaco) => {
     monaco.editor.defineTheme(MONACO_THEME, MONACO_THEME_DEFINITION);
-    monaco.editor.setTheme(MONACO_THEME);
   }, []);
 
   return (
@@ -73,9 +72,9 @@ export function MonacoEditor({ initialCode, onChange }: MonacoEditorProps) {
       defaultLanguage="typescript"
       value={code}
       onChange={handleChange}
-      onMount={handleMount}
+      beforeMount={handleBeforeMount}
       theme={MONACO_THEME}
-      options={{ editContext: false, minimap: { enabled: false } }}
+      options={{ minimap: { enabled: false } }}
     />
   );
 }
