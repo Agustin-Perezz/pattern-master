@@ -26,7 +26,7 @@ const OAUTH_BUTTONS: readonly OAuthButtonConfig[] = [
 
 export function OAuthButtons() {
   return (
-    <div className="space-y-2">
+    <div className="flex flex-col gap-[12px]">
       {OAUTH_BUTTONS.map(({ provider, label, icon: Icon }) => (
         <Button
           key={provider}

@@ -6,7 +6,7 @@ export function BookCreateForm() {
   return (
     <form
       action={createBook}
-      className="mt-6 flex gap-2"
+      className="flex flex-col gap-[8px] sm:flex-row"
       data-testid="book-create-form"
     >
       <BookFormFields />

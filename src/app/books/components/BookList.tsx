@@ -13,7 +13,7 @@ export function BookList({ books }: BookListProps) {
 
   return (
     <ul
-      className="mt-8 divide-y divide-zinc-200 rounded-lg border border-zinc-200"
+      className="mt-[24px] divide-y divide-hairline rounded-sm border border-hairline bg-surface-soft"
       data-testid="book-list"
     >
       {books.map((book) => (

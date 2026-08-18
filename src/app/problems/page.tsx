@@ -1,7 +1,7 @@
-import { ProblemBrowser } from "./problems/components/ProblemBrowser";
-import { ProblemTopNav } from "./problems/components/ProblemTopNav";
+import { ProblemBrowser } from "./components/ProblemBrowser";
+import { ProblemTopNav } from "./components/ProblemTopNav";
 
-export default function HomePage() {
+export default function ProblemsPage() {
   return (
     <div className="flex min-h-dvh flex-col bg-canvas">
       <ProblemTopNav />
