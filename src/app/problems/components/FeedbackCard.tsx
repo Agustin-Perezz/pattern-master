@@ -1,4 +1,4 @@
-import { Check, TriangleAlert } from "lucide-react";
+import { Check, Info, TriangleAlert } from "lucide-react";
 import type * as React from "react";
 
 import {
@@ -8,17 +8,35 @@ import {
   CardTitle,
 } from "@/components/opencode/card";
 
+type FeedbackCardVariant = "success" | "warning" | "neutral";
+
 type FeedbackCardProps = {
-  variant: "success" | "warning";
+  variant: FeedbackCardVariant;
   title: string;
   children: React.ReactNode;
 };
 
+const ACCENT_BY_VARIANT: Record<FeedbackCardVariant, string> = {
+  success: "border-l-success",
+  warning: "border-l-warning",
+  neutral: "border-l-hairline-strong",
+};
+
+const ICON_COLOR_BY_VARIANT: Record<FeedbackCardVariant, string> = {
+  success: "text-success",
+  warning: "text-warning",
+  neutral: "text-mute",
+};
+
 export function FeedbackCard({ variant, title, children }: FeedbackCardProps) {
-  const accent =
-    variant === "success" ? "border-l-success" : "border-l-warning";
-  const Icon = variant === "success" ? Check : TriangleAlert;
-  const iconColor = variant === "success" ? "text-success" : "text-warning";
+  const accent = ACCENT_BY_VARIANT[variant];
+  const iconColor = ICON_COLOR_BY_VARIANT[variant];
+  const Icon =
+    variant === "success"
+      ? Check
+      : variant === "warning"
+        ? TriangleAlert
+        : Info;
 
   return (
     <Card tone="soft" className={`border-l-4 ${accent}`}>
