@@ -26,8 +26,7 @@ export const submissionMapper = {
       submitted_code: props.submittedCode,
       score: props.score,
       pattern_applied: props.patternApplied,
-      feedback_json:
-        props.feedback as unknown as SubmissionInsert["feedback_json"],
+      feedback_json: props.feedback as SubmissionInsert["feedback_json"],
     };
   },
 };
