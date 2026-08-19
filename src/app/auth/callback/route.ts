@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import {
-  DASHBOARD_PATH,
+  HOME_PATH,
   SIGNIN_PATH,
 } from "@/lib/shared/infrastructure/auth.server";
 import { createSupabaseServerClient } from "@/lib/shared/infrastructure/supabase.server";
@@ -23,7 +23,7 @@ export async function GET(request: Request) {
       redirect(`${SIGNIN_PATH}?error=auth_failed`);
     }
 
-    redirect(DASHBOARD_PATH);
+    redirect(HOME_PATH);
   }
 
   redirect(SIGNIN_PATH);

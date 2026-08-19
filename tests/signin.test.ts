@@ -29,10 +29,10 @@ test("magic link with valid email shows success message", async ({ page }) => {
   ).toBeVisible();
 });
 
-test("authenticated user is redirected to dashboard", async ({
+test("authenticated user is redirected to home", async ({
   authenticatedPage,
 }) => {
   await authenticatedPage.goto("/signin");
 
-  await expect(authenticatedPage).toHaveURL("/dashboard");
+  await expect(authenticatedPage).toHaveURL("/");
 });

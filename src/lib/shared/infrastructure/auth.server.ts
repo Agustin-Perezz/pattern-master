@@ -8,7 +8,7 @@ export type User = {
 };
 
 export const SIGNIN_PATH = "/signin";
-export const DASHBOARD_PATH = "/dashboard";
+export const HOME_PATH = "/";
 export const AUTH_CALLBACK_PATH = "/auth/callback";
 
 export async function getUser(): Promise<User | null> {
