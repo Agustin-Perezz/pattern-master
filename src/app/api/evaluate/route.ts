@@ -1,7 +1,7 @@
 import { evaluateSubmissionRequestDto } from "@/application/use-cases/evaluate-submission/evaluate-submission.request.dto";
 import { createEvaluationContainer } from "@/lib/containers/evaluation.container";
 import { createSubmissionContainer } from "@/lib/containers/submission.container";
-import { getUser } from "@/lib/shared/infrastructure/auth.server";
+import { getUserVerified } from "@/lib/shared/infrastructure/auth.server";
 import { createSupabaseServerClient } from "@/lib/shared/infrastructure/supabase.server";
 
 const INVALID_INPUT_STATUS = 400;
@@ -21,7 +21,7 @@ export async function POST(req: Request) {
     );
   }
 
-  const user = await getUser();
+  const user = await getUserVerified();
 
   if (!user) {
     return Response.json(
