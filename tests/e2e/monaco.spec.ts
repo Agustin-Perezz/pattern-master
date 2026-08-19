@@ -1,7 +1,7 @@
 import { expect, test } from "../_shared/app-fixtures";
 
 const SLUG = "refactor-the-payment-processor";
-const STARTER_TEXT = "interface IPaymentStrategy";
+const STARTER_TEXT = "class Checkout";
 const EDITOR_SELECTOR = ".monaco-editor";
 const TYPED_TEXT = "// user edit";
 
