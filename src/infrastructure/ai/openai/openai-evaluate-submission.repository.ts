@@ -3,7 +3,7 @@ import { generateObject } from "ai";
 import type { EvaluateSubmissionRepository } from "@/application/use-cases/evaluate-submission/evaluate-submission.repository.interface";
 import type { Evaluation } from "@/domain/entities/evaluation.schema";
 import { evaluationSchema } from "@/domain/entities/evaluation.schema";
-import { OPENAI_API_KEY } from "@/lib/shared/infrastructure/env";
+import { getOpenAiApiKey } from "@/lib/shared/infrastructure/env";
 
 const OPENAI_MODEL = "gpt-4o-mini";
 
@@ -15,7 +15,7 @@ export class OpenaiEvaluateSubmissionRepository
     challengeSlug: string,
     targetPattern: string,
   ): Promise<Evaluation> {
-    const openai = createOpenAI({ apiKey: OPENAI_API_KEY });
+    const openai = createOpenAI({ apiKey: getOpenAiApiKey() });
     const result = await generateObject({
       model: openai(OPENAI_MODEL),
       schema: evaluationSchema,
