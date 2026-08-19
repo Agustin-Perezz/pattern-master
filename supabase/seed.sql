@@ -32,27 +32,19 @@ insert into public.challenges (
   }
 }$$,
   'checkout.ts',
-  $$interface IPaymentStrategy {
-  pay(amount: number): void
-}
-
-class StripeStrategy implements IPaymentStrategy {
-  pay(amount: number) {
-    // charge via Stripe
-  }
-}
-
-class PayPalStrategy implements IPaymentStrategy {
-  pay(amount: number) {
-    // charge via PayPal
-  }
-}
-
-class Checkout {
-  constructor(private strategy: IPaymentStrategy) {}
-
-  process(amount: number) {
-    this.strategy.pay(amount)
+  $$class Checkout {
+  process(method: string, amount: number) {
+    switch (method) {
+      case "stripe":
+        // ...charge via Stripe
+        break
+      case "paypal":
+        // ...charge via PayPal
+        break
+      case "crypto":
+        // ...charge via Crypto
+        break
+    }
   }
 }$$
 ),
@@ -75,20 +67,12 @@ class Checkout {
   }
 }$$,
   'order-service.ts',
-  $$interface Observer {
-  update(event: string): void
-}
-
-class OrderService {
-  private observers: Observer[] = []
-
-  subscribe(o: Observer) {
-    this.observers.push(o)
-  }
-
+  $$class OrderService {
   placeOrder() {
     // ...persist order
-    this.observers.forEach((o) => o.update("order.placed"))
+    sendEmail()
+    sendSMS()
+    sendPush()
   }
 }$$
 ),
@@ -108,20 +92,10 @@ class OrderService {
   else if (kind === "danger") return new DangerButton()
 }$$,
   'widgets.ts',
-  $$interface Button {
-  render(): void
-}
-
-class ButtonFactory {
-  private registry: Record<string, () => Button> = {}
-
-  register(kind: string, make: () => Button) {
-    this.registry[kind] = make
-  }
-
-  create(kind: string): Button {
-    return this.registry[kind]()
-  }
+  $$function render(kind: string) {
+  if (kind === "primary") return new PrimaryButton()
+  else if (kind === "ghost") return new GhostButton()
+  else if (kind === "danger") return new DangerButton()
 }$$
 ),
 (
@@ -144,18 +118,13 @@ const a = new Config()
 const b = new Config() // different object!$$,
   'config.ts',
   $$export class Config {
-  private static instance: Config
   values: Record<string, string> = {}
+}
 
-  private constructor() {}
-
-  static get(): Config {
-    if (!Config.instance) {
-      Config.instance = new Config()
-    }
-    return Config.instance
-  }
-}$$
+// module A
+const a = new Config()
+// module B
+const b = new Config() // different object!$$
 ),
 (
   'wrap-the-legacy-api',
@@ -175,17 +144,13 @@ const b = new Config() // different object!$$,
 
 // app expects: gateway.pay(amount)$$,
   'gateway.ts',
-  $$interface PaymentGateway {
-  pay(amount: number): void
+  $$class LegacyGateway {
+  charge_card(cents: number) {
+    // ...legacy call
+  }
 }
 
-class LegacyGatewayAdapter implements PaymentGateway {
-  constructor(private legacy: LegacyGateway) {}
-
-  pay(amount: number) {
-    this.legacy.charge_card(Math.round(amount * 100))
-  }
-}$$
+// app expects: gateway.pay(amount)$$
 ),
 (
   'decorate-your-coffee',
@@ -204,21 +169,11 @@ class LegacyGatewayAdapter implements PaymentGateway {
 }
 // ...and a class for every combination$$,
   'coffee.ts',
-  $$interface Beverage {
-  cost(): number
-}
-
-class Espresso implements Beverage {
+  $$class EspressoWithMilkAndSugar {
   cost() {
-    return 2.0
+    return 2.0 + 0.5 + 0.25
   }
 }
-
-class MilkDecorator implements Beverage {
-  constructor(private inner: Beverage) {}
-  cost() {
-    return this.inner.cost() + 0.5
-  }
-}$$
+// ...and a class for every combination$$
 )
 on conflict (slug) do nothing;
