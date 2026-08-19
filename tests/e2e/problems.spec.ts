@@ -51,7 +51,7 @@ test("problems page filters challenges by difficulty", async ({ page }) => {
 });
 
 test("challenge detail page renders a real challenge from the database", async ({
-  page,
+  authenticatedPage: page,
 }) => {
   await page.goto("/problems/refactor-the-payment-processor");
 
@@ -69,7 +69,9 @@ test("challenge detail page renders a real challenge from the database", async (
   ).toBeVisible();
 });
 
-test("unknown challenge slug renders a not-found state", async ({ page }) => {
+test("unknown challenge slug renders a not-found state", async ({
+  authenticatedPage: page,
+}) => {
   await page.goto("/problems/does-not-exist");
 
   await expect(

@@ -9,7 +9,7 @@ export const evaluationSchema = z.object({
   patternApplied: z.boolean(),
   praise: z.string().nullable(),
   criticalFeedback: z.string().nullable(),
-  cleanArchitectureViolations: z.array(z.string()).optional(),
+  cleanArchitectureViolations: z.array(z.string()),
 });
 
 export type Evaluation = z.infer<typeof evaluationSchema>;

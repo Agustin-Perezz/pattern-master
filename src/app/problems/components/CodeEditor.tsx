@@ -12,12 +12,14 @@ type CodeEditorProps = {
   problem: ChallengeProps;
   onSubmit: (code: string) => void;
   isSubmitting: boolean;
+  error: string | null;
 };
 
 export function CodeEditor({
   problem,
   onSubmit,
   isSubmitting,
+  error,
 }: CodeEditorProps) {
   const [code, setCode] = React.useState(problem.editorCode);
 
@@ -44,6 +46,7 @@ export function CodeEditor({
         onReset={handleReset}
         onSubmit={handleSubmit}
         isSubmitting={isSubmitting}
+        error={error}
       />
     </section>
   );
@@ -64,19 +67,40 @@ type EditorFooterProps = {
   onReset: () => void;
   onSubmit: () => void;
   isSubmitting: boolean;
+  error: string | null;
 };
 
-function EditorFooter({ onReset, onSubmit, isSubmitting }: EditorFooterProps) {
+function EditorFooter({
+  onReset,
+  onSubmit,
+  isSubmitting,
+  error,
+}: EditorFooterProps) {
   return (
-    <div className="flex shrink-0 items-center justify-end gap-[12px] border-t border-surface-dark-elevated px-[16px] py-[12px]">
-      <Button variant="secondary" onClick={onReset}>
-        <RotateCcw className="size-[16px]" aria-hidden />
-        Reset Code
-      </Button>
-      <Button variant="primary" onClick={onSubmit} disabled={isSubmitting}>
-        <Play className="size-[16px]" aria-hidden />
-        Submit for Review
-      </Button>
+    <div className="flex shrink-0 flex-col gap-[8px] border-t border-surface-dark-elevated px-[16px] py-[12px]">
+      {error && <EditorFooterError message={error} />}
+      <div className="flex items-center justify-end gap-[12px]">
+        <Button variant="secondary" onClick={onReset}>
+          <RotateCcw className="size-[16px]" aria-hidden />
+          Reset Code
+        </Button>
+        <Button variant="primary" onClick={onSubmit} disabled={isSubmitting}>
+          <Play className="size-[16px]" aria-hidden />
+          Submit for Review
+        </Button>
+      </div>
     </div>
+  );
+}
+
+type EditorFooterErrorProps = {
+  message: string;
+};
+
+function EditorFooterError({ message }: EditorFooterErrorProps) {
+  return (
+    <p role="alert" className="text-[13px] text-danger">
+      {message}
+    </p>
   );
 }

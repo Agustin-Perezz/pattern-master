@@ -31,6 +31,7 @@ export function ProblemWorkspace({ problem }: ProblemWorkspaceProps) {
         problem={problem}
         onSubmit={handleSubmit}
         isSubmitting={isSubmitting}
+        error={error}
       />
     </>
   );

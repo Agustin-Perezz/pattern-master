@@ -44,7 +44,7 @@ export async function POST(req: Request) {
     feedback: {
       praise: evaluation.praise,
       criticalFeedback: evaluation.criticalFeedback,
-      cleanArchitectureViolations: evaluation.cleanArchitectureViolations ?? [],
+      cleanArchitectureViolations: evaluation.cleanArchitectureViolations,
     },
   });
 
