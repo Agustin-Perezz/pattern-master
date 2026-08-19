@@ -6,7 +6,22 @@ import type { Evaluation } from "@/domain/entities/evaluation.schema";
 const EVALUATE_ENDPOINT = "/api/evaluate";
 const JSON_CONTENT_TYPE = "application/json";
 const UNEXPECTED_ERROR = "Unexpected error";
-const REQUEST_FAILED_PREFIX = "Request failed";
+
+const UNAUTHORIZED_MESSAGE = "You must be signed in to submit code for review.";
+const BAD_REQUEST_MESSAGE = "The submitted code or challenge data is invalid.";
+const BAD_GATEWAY_MESSAGE =
+  "The AI evaluation service is unavailable. Please try again.";
+const GENERIC_ERROR_MESSAGE = "Something went wrong. Please try again.";
+
+const ERROR_STATUS_MESSAGES: Readonly<Record<number, string>> = {
+  401: UNAUTHORIZED_MESSAGE,
+  400: BAD_REQUEST_MESSAGE,
+  502: BAD_GATEWAY_MESSAGE,
+};
+
+function statusMessage(status: number): string {
+  return ERROR_STATUS_MESSAGES[status] ?? GENERIC_ERROR_MESSAGE;
+}
 
 export type EvaluateSubmissionInput = {
   code: string;
@@ -20,8 +35,6 @@ type UseEvaluateSubmissionResult = {
   isSubmitting: boolean;
   submit: (input: EvaluateSubmissionInput) => Promise<void>;
 };
-
-type ErrorResponse = { error?: string };
 
 export function useEvaluateSubmission(): UseEvaluateSubmissionResult {
   const [evaluation, setEvaluation] = React.useState<Evaluation | null>(null);
@@ -40,10 +53,7 @@ export function useEvaluateSubmission(): UseEvaluateSubmissionResult {
       });
 
       if (!res.ok) {
-        const body = (await res.json().catch(() => ({}))) as ErrorResponse;
-        throw new Error(
-          body.error ?? `${REQUEST_FAILED_PREFIX} (${res.status})`,
-        );
+        throw new Error(statusMessage(res.status));
       }
 
       setEvaluation((await res.json()) as Evaluation);
