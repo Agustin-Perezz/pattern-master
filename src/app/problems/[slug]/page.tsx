@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
 
+import { requireUser } from "@/lib/shared/infrastructure/auth.server";
+
 import { ProblemTopNav } from "../components/ProblemTopNav";
 import { ProblemWorkspace } from "../components/ProblemWorkspace";
 import { getChallengeBySlug } from "./actions";
@@ -12,6 +14,7 @@ type ProblemPageProps = {
 
 export default async function ProblemPage({ params }: ProblemPageProps) {
   const { slug } = await params;
+  await requireUser();
   const result = await getChallengeBySlug(slug);
 
   if (!result.found) {
