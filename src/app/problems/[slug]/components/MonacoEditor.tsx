@@ -2,7 +2,7 @@
 
 import type { BeforeMount } from "@monaco-editor/react";
 import dynamic from "next/dynamic";
-import * as React from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import {
   EDITOR_MODEL_PATH,
@@ -19,13 +19,13 @@ export type MonacoEditorProps = {
 };
 
 export function MonacoEditor({ initialCode, onChange }: MonacoEditorProps) {
-  const [code, setCode] = React.useState(initialCode);
+  const [code, setCode] = useState(initialCode);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setCode(initialCode);
   }, [initialCode]);
 
-  const handleChange = React.useCallback(
+  const handleChange = useCallback(
     (value: string | undefined) => {
       const next = value ?? "";
       setCode(next);
@@ -34,7 +34,7 @@ export function MonacoEditor({ initialCode, onChange }: MonacoEditorProps) {
     [onChange],
   );
 
-  const handleBeforeMount: BeforeMount = React.useCallback((monaco) => {
+  const handleBeforeMount: BeforeMount = useCallback((monaco) => {
     monaco.editor.defineTheme(MONACO_THEME, MONACO_THEME_DEFINITION);
     monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
       target: monaco.languages.typescript.ScriptTarget.ESNext,

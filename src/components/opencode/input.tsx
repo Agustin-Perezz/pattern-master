@@ -1,10 +1,10 @@
-import * as React from "react";
+import { forwardRef, type InputHTMLAttributes, type ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
 
-export const Input = React.forwardRef<
+export const Input = forwardRef<
   HTMLInputElement,
-  React.InputHTMLAttributes<HTMLInputElement>
+  InputHTMLAttributes<HTMLInputElement>
 >(({ className, ...props }, ref) => (
   <input
     ref={ref}
@@ -23,7 +23,7 @@ Input.displayName = "Input";
 type FieldProps = {
   label: string;
   htmlFor: string;
-  children: React.ReactNode;
+  children: ReactNode;
 };
 
 export function Field({ label, htmlFor, children }: FieldProps) {

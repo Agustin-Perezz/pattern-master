@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useCallback, useState } from "react";
 import type { Evaluation } from "@/domain/entities/evaluation.schema";
 
 const EVALUATE_ENDPOINT = "/api/evaluate";
@@ -37,11 +37,11 @@ type UseEvaluateSubmissionResult = {
 };
 
 export function useEvaluateSubmission(): UseEvaluateSubmissionResult {
-  const [evaluation, setEvaluation] = React.useState<Evaluation | null>(null);
-  const [error, setError] = React.useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [evaluation, setEvaluation] = useState<Evaluation | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const submit = React.useCallback(async (input: EvaluateSubmissionInput) => {
+  const submit = useCallback(async (input: EvaluateSubmissionInput) => {
     setIsSubmitting(true);
     setError(null);
 
