@@ -58,7 +58,7 @@ function EvaluationFeedback({ evaluation }: { evaluation: Evaluation }) {
       <FeedbackCard variant="warning" title="Critical Feedback">
         {evaluation.criticalFeedback ?? "No critical feedback provided."}
       </FeedbackCard>
-      {evaluation.cleanArchitectureViolations?.map((violation) => (
+      {evaluation.cleanArchitectureViolations.map((violation) => (
         <FeedbackCard key={violation} variant="warning" title="Violation">
           {violation}
         </FeedbackCard>

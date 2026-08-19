@@ -20,18 +20,16 @@ describe("evaluationSchema", () => {
     expect(result.success).toBe(true);
   });
 
-  it("validates without optional cleanArchitectureViolations", () => {
-    const { cleanArchitectureViolations: _violations, ...withoutOptional } =
-      validData;
-    const result = evaluationSchema.safeParse(withoutOptional);
+  it("rejects missing cleanArchitectureViolations", () => {
+    const { cleanArchitectureViolations: _violations, ...without } = validData;
+    const result = evaluationSchema.safeParse(without);
 
-    expect(result.success).toBe(true);
+    expect(result.success).toBe(false);
   });
 
   it("accepts null praise and criticalFeedback", () => {
     const result = evaluationSchema.safeParse({
-      score: 50,
-      patternApplied: false,
+      ...validData,
       praise: null,
       criticalFeedback: null,
     });
