@@ -9,11 +9,11 @@ describe("SignInWithMagicLinkUseCase", () => {
     };
     const useCase = new SignInWithMagicLinkUseCase(repository);
 
-    await useCase.execute({ email: "user@example.com" }, "/dashboard");
+    await useCase.execute({ email: "user@example.com" }, "/");
 
     expect(repository.signInWithOtp).toHaveBeenCalledWith(
       "user@example.com",
-      "/dashboard",
+      "/",
     );
   });
 
@@ -24,7 +24,7 @@ describe("SignInWithMagicLinkUseCase", () => {
     const useCase = new SignInWithMagicLinkUseCase(repository);
 
     await expect(
-      useCase.execute({ email: "user@example.com" }, "/dashboard"),
+      useCase.execute({ email: "user@example.com" }, "/"),
     ).resolves.toBeUndefined();
   });
 });

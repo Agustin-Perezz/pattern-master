@@ -5,9 +5,9 @@ import {
   supabaseUrl,
 } from "@/lib/shared/infrastructure/env";
 
-const PROTECTED_PREFIXES = ["/dashboard"] as const;
+const PROTECTED_PREFIXES = [] as const;
 const SIGNIN_PATH = "/signin";
-const DASHBOARD_PATH = "/dashboard";
+const HOME_PATH = "/";
 
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
@@ -42,7 +42,7 @@ export async function proxy(request: NextRequest) {
   }
 
   if (hasUser && request.nextUrl.pathname === SIGNIN_PATH) {
-    return NextResponse.redirect(new URL(DASHBOARD_PATH, request.url));
+    return NextResponse.redirect(new URL(HOME_PATH, request.url));
   }
 
   return response;

@@ -12,11 +12,11 @@ describe("SignInWithOAuthUseCase", () => {
     };
     const useCase = new SignInWithOAuthUseCase(repository);
 
-    const result = await useCase.execute(OAuthProvider.Google, "/dashboard");
+    const result = await useCase.execute(OAuthProvider.Google, "/");
 
     expect(repository.signInWithOAuth).toHaveBeenCalledWith(
       OAuthProvider.Google,
-      "/dashboard",
+      "/",
     );
     expect(result).toBe(oauthUrl);
   });
