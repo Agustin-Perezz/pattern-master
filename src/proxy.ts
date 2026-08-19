@@ -5,7 +5,11 @@ import {
   supabaseUrl,
 } from "@/lib/shared/infrastructure/env";
 
-const PROTECTED_PREFIXES = [] as const;
+// Trailing slash matches `/problems/<slug>` (detail, protected) but NOT
+// `/problems` (listing, public). Keep the asymmetry intentional.
+// `/api/evaluate` is the protected POST endpoint; middleware returns 401 for
+// it instead of redirecting, so the prefix is listed separately.
+const PROTECTED_PREFIXES = ["/problems/", "/api/evaluate"] as const;
 const SIGNIN_PATH = "/signin";
 const HOME_PATH = "/";
 
@@ -38,6 +42,9 @@ export async function proxy(request: NextRequest) {
   );
 
   if (isProtected && !hasUser) {
+    if (request.nextUrl.pathname.startsWith("/api/")) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
     return NextResponse.redirect(new URL(SIGNIN_PATH, request.url));
   }
 
