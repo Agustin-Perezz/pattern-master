@@ -1,9 +1,9 @@
-import * as React from "react";
+import { Fragment, type ReactNode } from "react";
 
 import { classFor, TOKEN_RE } from "./syntax-tokens";
 
-function tokenize(line: string, keyPrefix: string): React.ReactNode[] {
-  const nodes: React.ReactNode[] = [];
+function tokenize(line: string, keyPrefix: string): ReactNode[] {
+  const nodes: ReactNode[] = [];
   let lastIndex = 0;
   let match: RegExpExecArray | null;
   TOKEN_RE.lastIndex = 0;
@@ -37,12 +37,12 @@ function tokenize(line: string, keyPrefix: string): React.ReactNode[] {
   return nodes;
 }
 
-export function highlight(code: string): React.ReactNode[] {
+export function highlight(code: string): ReactNode[] {
   return code.split("\n").map((line, lineNumber) => (
     // biome-ignore lint/suspicious/noArrayIndexKey: line order is fixed for a static code string
-    <React.Fragment key={lineNumber}>
+    <Fragment key={lineNumber}>
       {line.length ? tokenize(line, String(lineNumber)) : "\u00A0"}
       {"\n"}
-    </React.Fragment>
+    </Fragment>
   ));
 }

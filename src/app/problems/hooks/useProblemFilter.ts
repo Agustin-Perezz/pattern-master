@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState } from "react";
 
 import type { ChallengeProps } from "@/domain/entities/challenge.entity";
 
@@ -32,8 +32,8 @@ export function filterChallenges(
 }
 
 export function useProblemFilter(initialChallenges: ChallengeProps[]) {
-  const [filter, setFilter] = React.useState<Filter>(ALL_FILTER);
-  const [query, setQuery] = React.useState("");
+  const [filter, setFilter] = useState<Filter>(ALL_FILTER);
+  const [query, setQuery] = useState("");
 
   const visible = filterChallenges(initialChallenges, filter, query);
 

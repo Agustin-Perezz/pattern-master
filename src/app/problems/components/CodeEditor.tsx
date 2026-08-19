@@ -1,7 +1,7 @@
 "use client";
 
 import { Loader2, Play, RotateCcw } from "lucide-react";
-import * as React from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { Button } from "@/components/opencode/button";
 import type { ChallengeProps } from "@/domain/entities/challenge.entity";
@@ -21,17 +21,17 @@ export function CodeEditor({
   isSubmitting,
   error,
 }: CodeEditorProps) {
-  const [code, setCode] = React.useState(problem.editorCode);
+  const [code, setCode] = useState(problem.editorCode);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setCode(problem.editorCode);
   }, [problem.editorCode]);
 
-  const handleReset = React.useCallback(() => {
+  const handleReset = useCallback(() => {
     setCode(problem.editorCode);
   }, [problem.editorCode]);
 
-  const handleSubmit = React.useCallback(() => {
+  const handleSubmit = useCallback(() => {
     onSubmit(code);
   }, [code, onSubmit]);
 

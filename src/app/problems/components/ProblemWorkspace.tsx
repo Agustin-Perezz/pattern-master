@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 
 import type { ChallengeProps } from "@/domain/entities/challenge.entity";
 import { useEvaluateSubmission } from "../hooks/useEvaluateSubmission";
@@ -16,7 +16,7 @@ type ProblemWorkspaceProps = {
 
 export function ProblemWorkspace({ problem }: ProblemWorkspaceProps) {
   const { evaluation, error, isSubmitting, submit } = useEvaluateSubmission();
-  const [tab, setTab] = React.useState(DESCRIPTION_TAB);
+  const [tab, setTab] = useState(DESCRIPTION_TAB);
 
   const handleSubmit = (code: string) => {
     setTab(EVALUATION_TAB);
