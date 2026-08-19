@@ -15,3 +15,11 @@ if (!publishableKey) {
 
 export const supabaseUrl = url;
 export const supabasePublishableKey = publishableKey;
+
+export function getOpenAiApiKey(): string {
+  const key = process.env.OPENAI_API_KEY;
+  if (!key) {
+    throw new Error("Missing OPENAI_API_KEY — set it in your .env file");
+  }
+  return key;
+}
