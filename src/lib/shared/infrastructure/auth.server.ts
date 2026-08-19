@@ -13,18 +13,21 @@ export const AUTH_CALLBACK_PATH = "/auth/callback";
 
 export async function getUser(): Promise<User | null> {
   const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data, error } = await supabase.auth.getClaims();
 
-  if (!user) {
+  if (error || !data) {
     return null;
   }
 
+  const claims = data.claims;
+  const userMetadata = claims.user_metadata as
+    | { full_name?: string; name?: string }
+    | undefined;
+
   return {
-    id: user.id,
-    email: user.email ?? "",
-    name: user.user_metadata?.full_name ?? user.user_metadata?.name,
+    id: claims.sub,
+    email: claims.email ?? "",
+    name: userMetadata?.full_name ?? userMetadata?.name,
   };
 }
 
