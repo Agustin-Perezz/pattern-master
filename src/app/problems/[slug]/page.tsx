@@ -1,8 +1,7 @@
 import { notFound } from "next/navigation";
 
-import { CodeEditor } from "../components/CodeEditor";
-import { ProblemLeftPane } from "../components/ProblemLeftPane";
 import { ProblemTopNav } from "../components/ProblemTopNav";
+import { ProblemWorkspace } from "../components/ProblemWorkspace";
 import { getChallengeBySlug } from "./actions";
 
 export const dynamicParams = true;
@@ -25,8 +24,7 @@ export default async function ProblemPage({ params }: ProblemPageProps) {
     <div className="flex h-dvh flex-col overflow-hidden bg-canvas">
       <ProblemTopNav subtitle={challenge.challenge} />
       <main className="flex min-h-0 flex-1 flex-col md:flex-row">
-        <ProblemLeftPane problem={challenge} />
-        <CodeEditor problem={challenge} />
+        <ProblemWorkspace problem={challenge} />
       </main>
     </div>
   );
