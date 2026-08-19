@@ -41,7 +41,9 @@ async function clearAndType(
   await textarea.fill(text);
 }
 
-test("Monaco editor renders the challenge starter code", async ({ page }) => {
+test("Monaco editor renders the challenge starter code", async ({
+  authenticatedPage: page,
+}) => {
   await page.goto(`/problems/${SLUG}`);
 
   const editor = getEditor(page);
@@ -51,7 +53,7 @@ test("Monaco editor renders the challenge starter code", async ({ page }) => {
 });
 
 test.skip("user can type and modify code in the Monaco editor", async ({
-  page,
+  authenticatedPage: page,
 }) => {
   await page.goto(`/problems/${SLUG}`);
 
@@ -65,7 +67,7 @@ test.skip("user can type and modify code in the Monaco editor", async ({
 });
 
 test.skip("reset button restores the original starter code", async ({
-  page,
+  authenticatedPage: page,
 }) => {
   await page.goto(`/problems/${SLUG}`);
 
@@ -85,7 +87,7 @@ test.skip("reset button restores the original starter code", async ({
 });
 
 test("submit button is available to capture editor content", async ({
-  page,
+  authenticatedPage: page,
 }) => {
   await page.goto(`/problems/${SLUG}`);
 
@@ -96,7 +98,9 @@ test("submit button is available to capture editor content", async ({
   await expect(submitButton).toBeEnabled();
 });
 
-test("problem page does not crash from Monaco SSR errors", async ({ page }) => {
+test("problem page does not crash from Monaco SSR errors", async ({
+  authenticatedPage: page,
+}) => {
   await page.goto(`/problems/${SLUG}`);
 
   await expect(
