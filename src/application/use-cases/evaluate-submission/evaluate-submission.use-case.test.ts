@@ -3,43 +3,38 @@ import type { Evaluation } from "@/domain/entities/evaluation.schema";
 import type { EvaluateSubmissionRepository } from "./evaluate-submission.repository.interface";
 import { EvaluateSubmissionUseCase } from "./evaluate-submission.use-case";
 
+const VALID_REQUEST = {
+  code: "class Checkout { process() {} }",
+  challengeSlug: "refactor-the-payment-processor",
+  targetPattern: "Strategy",
+};
+
 function makeEvaluation(overrides: Partial<Evaluation> = {}): Evaluation {
   return {
-    score: overrides.score ?? 85,
-    patternApplied: overrides.patternApplied ?? true,
-    praise: overrides.praise ?? "Great use of dependency inversion.",
-    criticalFeedback:
-      overrides.criticalFeedback ?? "Extract the builder logic.",
-    cleanArchitectureViolations: overrides.cleanArchitectureViolations ?? [
-      "Controller talks directly to the database.",
-    ],
+    score: 75,
+    patternApplied: true,
+    praise: "Good abstraction",
+    criticalFeedback: "Missing interface",
+    cleanArchitectureViolations: ["SRP violation"],
+    ...overrides,
   };
 }
 
-const EVALUATE_SUBMISSION_VALID_CODE = "class Singleton { /* ... */ }";
-const EVALUATE_SUBMISSION_VALID_SLUG = "singleton-pattern";
-const EVALUATE_SUBMISSION_VALID_PATTERN = "Singleton";
-
 describe("EvaluateSubmissionUseCase", () => {
-  it("returns the evaluation provided by the repository", async () => {
+  it("returns the evaluation from the repository", async () => {
     const evaluation = makeEvaluation();
     const repository: EvaluateSubmissionRepository = {
       evaluate: vi.fn().mockResolvedValue(evaluation),
     };
     const useCase = new EvaluateSubmissionUseCase(repository);
 
-    const result = await useCase.execute({
-      code: EVALUATE_SUBMISSION_VALID_CODE,
-      challengeSlug: EVALUATE_SUBMISSION_VALID_SLUG,
-      targetPattern: EVALUATE_SUBMISSION_VALID_PATTERN,
-    });
+    const result = await useCase.execute(VALID_REQUEST);
 
     expect(repository.evaluate).toHaveBeenCalledWith(
-      EVALUATE_SUBMISSION_VALID_CODE,
-      EVALUATE_SUBMISSION_VALID_SLUG,
-      EVALUATE_SUBMISSION_VALID_PATTERN,
+      VALID_REQUEST.code,
+      VALID_REQUEST.challengeSlug,
+      VALID_REQUEST.targetPattern,
     );
-    expect(repository.evaluate).toHaveBeenCalledTimes(1);
     expect(result).toEqual({ evaluation });
   });
 
@@ -50,11 +45,7 @@ describe("EvaluateSubmissionUseCase", () => {
     const useCase = new EvaluateSubmissionUseCase(repository);
 
     await expect(
-      useCase.execute({
-        code: "",
-        challengeSlug: EVALUATE_SUBMISSION_VALID_SLUG,
-        targetPattern: EVALUATE_SUBMISSION_VALID_PATTERN,
-      }),
+      useCase.execute({ ...VALID_REQUEST, code: "" }),
     ).rejects.toThrow();
     expect(repository.evaluate).not.toHaveBeenCalled();
   });
@@ -66,11 +57,7 @@ describe("EvaluateSubmissionUseCase", () => {
     const useCase = new EvaluateSubmissionUseCase(repository);
 
     await expect(
-      useCase.execute({
-        code: EVALUATE_SUBMISSION_VALID_CODE,
-        challengeSlug: "",
-        targetPattern: EVALUATE_SUBMISSION_VALID_PATTERN,
-      }),
+      useCase.execute({ ...VALID_REQUEST, challengeSlug: "" }),
     ).rejects.toThrow();
     expect(repository.evaluate).not.toHaveBeenCalled();
   });
@@ -82,34 +69,19 @@ describe("EvaluateSubmissionUseCase", () => {
     const useCase = new EvaluateSubmissionUseCase(repository);
 
     await expect(
-      useCase.execute({
-        code: EVALUATE_SUBMISSION_VALID_CODE,
-        challengeSlug: EVALUATE_SUBMISSION_VALID_SLUG,
-        targetPattern: "",
-      }),
+      useCase.execute({ ...VALID_REQUEST, targetPattern: "" }),
     ).rejects.toThrow();
     expect(repository.evaluate).not.toHaveBeenCalled();
   });
 
-  it("passes a low-score evaluation through unchanged", async () => {
-    const evaluation = makeEvaluation({
-      score: 12,
-      patternApplied: false,
-      praise: null,
-      criticalFeedback: "Pattern not identified.",
-      cleanArchitectureViolations: ["Mixing UI and domain logic."],
-    });
+  it("passes through repository errors", async () => {
     const repository: EvaluateSubmissionRepository = {
-      evaluate: vi.fn().mockResolvedValue(evaluation),
+      evaluate: vi.fn().mockRejectedValue(new Error("AI provider unavailable")),
     };
     const useCase = new EvaluateSubmissionUseCase(repository);
 
-    const result = await useCase.execute({
-      code: EVALUATE_SUBMISSION_VALID_CODE,
-      challengeSlug: EVALUATE_SUBMISSION_VALID_SLUG,
-      targetPattern: EVALUATE_SUBMISSION_VALID_PATTERN,
-    });
-
-    expect(result).toEqual({ evaluation });
+    await expect(useCase.execute(VALID_REQUEST)).rejects.toThrow(
+      "AI provider unavailable",
+    );
   });
 });

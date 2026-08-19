@@ -1,4 +1,3 @@
-import type { Evaluation } from "@/domain/entities/evaluation.schema";
 import type { EvaluateSubmissionRepository } from "./evaluate-submission.repository.interface";
 import type { EvaluateSubmissionRequestDto } from "./evaluate-submission.request.dto";
 import { evaluateSubmissionRequestDto } from "./evaluate-submission.request.dto";
@@ -10,13 +9,12 @@ export class EvaluateSubmissionUseCase {
   async execute(
     request: EvaluateSubmissionRequestDto,
   ): Promise<EvaluateSubmissionResponseDto> {
-    evaluateSubmissionRequestDto.parse(request);
-    const evaluation: Evaluation = await this.repository.evaluate(
-      request.code,
-      request.challengeSlug,
-      request.targetPattern,
+    const parsed = evaluateSubmissionRequestDto.parse(request);
+    const evaluation = await this.repository.evaluate(
+      parsed.code,
+      parsed.challengeSlug,
+      parsed.targetPattern,
     );
-
     return { evaluation };
   }
 }
