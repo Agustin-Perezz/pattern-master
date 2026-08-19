@@ -9,12 +9,18 @@ type ProblemLeftPaneProps = {
   problem: ChallengeProps;
   evaluation: Evaluation | null;
   error: string | null;
+  isSubmitting: boolean;
+  tab: string;
+  onTabChange: (tab: string) => void;
 };
 
 export function ProblemLeftPane({
   problem,
   evaluation,
   error,
+  isSubmitting,
+  tab,
+  onTabChange,
 }: ProblemLeftPaneProps) {
   return (
     <ProblemTabs
@@ -24,8 +30,11 @@ export function ProblemLeftPane({
           problem={problem}
           evaluation={evaluation}
           error={error}
+          isSubmitting={isSubmitting}
         />
       }
+      tab={tab}
+      onTabChange={onTabChange}
     />
   );
 }

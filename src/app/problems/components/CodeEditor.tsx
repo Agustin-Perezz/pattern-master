@@ -1,6 +1,6 @@
 "use client";
 
-import { Play, RotateCcw } from "lucide-react";
+import { Loader2, Play, RotateCcw } from "lucide-react";
 import * as React from "react";
 
 import { Button } from "@/components/opencode/button";
@@ -85,8 +85,12 @@ function EditorFooter({
           Reset Code
         </Button>
         <Button variant="primary" onClick={onSubmit} disabled={isSubmitting}>
-          <Play className="size-[16px]" aria-hidden />
-          Submit for Review
+          {isSubmitting ? (
+            <Loader2 className="size-[16px] animate-spin" aria-hidden />
+          ) : (
+            <Play className="size-[16px]" aria-hidden />
+          )}
+          {isSubmitting ? "Evaluating…" : "Submit for Review"}
         </Button>
       </div>
     </div>
