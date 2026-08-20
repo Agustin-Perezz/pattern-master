@@ -68,7 +68,7 @@ export const EDITOR_OPTIONS = {
   wordWrap: "on" as const,
   minimap: { enabled: false },
   bracketPairColorization: { enabled: true },
-  cursorBlinking: "expand" as const,
+  cursorBlinking: "solid" as const,
   formatOnPaste: true,
   scrollBeyondLastLine: false,
   smoothScrolling: true,
