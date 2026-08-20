@@ -31,16 +31,3 @@ test("rejects evaluation request with empty code", async ({
 
   expect(res.status()).toBe(BAD_REQUEST_STATUS);
 });
-
-test.skip("returns an evaluation for valid authenticated submission", async ({
-  authenticatedPage,
-}) => {
-  const res = await authenticatedPage.request.post(EVALUATE_URL, {
-    data: VALID_PAYLOAD,
-  });
-
-  expect(res.ok()).toBeTruthy();
-  const body = await res.json();
-  expect(typeof body.score).toBe("number");
-  expect(typeof body.patternApplied).toBe("boolean");
-});

@@ -3,7 +3,6 @@ import { expect, test } from "../_shared/app-fixtures";
 const SLUG = "refactor-the-payment-processor";
 const STARTER_TEXT = "class Checkout";
 const EDITOR_SELECTOR = ".monaco-editor";
-const TYPED_TEXT = "// user edit";
 
 function getEditor(page: import("@playwright/test").Page) {
   return page.locator(EDITOR_SELECTOR).first();
@@ -30,17 +29,6 @@ async function getMonacoValue(
   });
 }
 
-async function clearAndType(
-  page: import("@playwright/test").Page,
-  text: string,
-) {
-  const textarea = page.locator(".monaco-editor textarea").first();
-  await textarea.click();
-  await page.keyboard.press("Control+a");
-  await page.keyboard.press("Delete");
-  await textarea.fill(text);
-}
-
 test("Monaco editor renders the challenge starter code", async ({
   authenticatedPage: page,
 }) => {
@@ -50,40 +38,6 @@ test("Monaco editor renders the challenge starter code", async ({
   await expect(editor).toBeVisible();
   const value = await getMonacoValue(page);
   expect(value).toContain(STARTER_TEXT);
-});
-
-test.skip("user can type and modify code in the Monaco editor", async ({
-  authenticatedPage: page,
-}) => {
-  await page.goto(`/problems/${SLUG}`);
-
-  const editor = getEditor(page);
-  await expect(editor).toBeVisible();
-
-  await clearAndType(page, TYPED_TEXT);
-
-  const value = await getMonacoValue(page);
-  expect(value).toContain(TYPED_TEXT);
-});
-
-test.skip("reset button restores the original starter code", async ({
-  authenticatedPage: page,
-}) => {
-  await page.goto(`/problems/${SLUG}`);
-
-  const editor = getEditor(page);
-  await expect(editor).toBeVisible();
-
-  await clearAndType(page, "// changed");
-  let value = await getMonacoValue(page);
-  expect(value).toContain("// changed");
-
-  const resetButton = page.getByRole("button", { name: "Reset Code" });
-  await resetButton.click();
-
-  value = await getMonacoValue(page);
-  expect(value).toContain(STARTER_TEXT);
-  expect(value).not.toContain("// changed");
 });
 
 test("submit button is available to capture editor content", async ({
