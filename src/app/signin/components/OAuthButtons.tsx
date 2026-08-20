@@ -1,6 +1,6 @@
 "use client";
 
-import { FacebookIcon, GoogleIcon } from "@/components/icons/brand-icons";
+import { GitHubIcon, GoogleIcon } from "@/components/icons/brand-icons";
 import { Button } from "@/components/ui/button";
 import { OAuthProvider } from "@/domain/entities/oauth-provider.enum";
 import { signInWithOAuthAction } from "../actions";
@@ -18,9 +18,9 @@ const OAUTH_BUTTONS: readonly OAuthButtonConfig[] = [
     icon: () => <GoogleIcon className="size-5" />,
   },
   {
-    provider: OAuthProvider.Facebook,
-    label: "Facebook",
-    icon: () => <FacebookIcon className="size-5" />,
+    provider: OAuthProvider.GitHub,
+    label: "GitHub",
+    icon: () => <GitHubIcon className="size-5" />,
   },
 ] as const;
 
