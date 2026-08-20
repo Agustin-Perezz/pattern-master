@@ -157,7 +157,7 @@ supabase status -o env
 #    Mailpit (email testing) at http://127.0.0.1:55324
 ```
 
-**Auth providers:** Email (magic link) works by default — Mailpit captures the emails. Google and Facebook OAuth need provider setup and secrets in `supabase/.env`. See [`docs/supabase.md`](./docs/supabase.md) "Auth providers local development".
+**Auth providers:** Email (magic link) works by default — Mailpit captures the emails. Google and GitHub OAuth need provider setup and secrets in `supabase/.env`. See [`docs/supabase.md`](./docs/supabase.md) "Auth providers local development".
 
 **Daily commands:**
 
