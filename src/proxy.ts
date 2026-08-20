@@ -69,6 +69,17 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL(HOME_PATH, request.url));
   }
 
+  // After OAuth callback exchanges the code, the provider may redirect to
+  // "/" with the code still in the query string. Strip it so the user does
+  // not see ?code=... in the URL bar on the home page.
+  if (
+    request.nextUrl.pathname === HOME_PATH &&
+    request.nextUrl.searchParams.has("code")
+  ) {
+    const cleanUrl = new URL(HOME_PATH, request.url);
+    return NextResponse.redirect(cleanUrl);
+  }
+
   return response;
 }
 
