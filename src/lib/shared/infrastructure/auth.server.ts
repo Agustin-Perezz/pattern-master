@@ -63,3 +63,17 @@ export async function requireUser(): Promise<User> {
 
   return user;
 }
+
+export function getUserInitials(user: {
+  name?: string;
+  email: string;
+}): string {
+  if (user.name) {
+    const parts = user.name.trim().split(/\s+/);
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+    return user.name.slice(0, 2).toUpperCase();
+  }
+  return user.email.slice(0, 2).toUpperCase();
+}
