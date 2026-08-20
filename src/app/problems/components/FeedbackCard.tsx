@@ -28,15 +28,16 @@ const ICON_COLOR_BY_VARIANT: Record<FeedbackCardVariant, string> = {
   neutral: "text-mute",
 };
 
+const ICON_BY_VARIANT: Record<FeedbackCardVariant, typeof Check> = {
+  success: Check,
+  warning: TriangleAlert,
+  neutral: Info,
+};
+
 export function FeedbackCard({ variant, title, children }: FeedbackCardProps) {
   const accent = ACCENT_BY_VARIANT[variant];
   const iconColor = ICON_COLOR_BY_VARIANT[variant];
-  const Icon =
-    variant === "success"
-      ? Check
-      : variant === "warning"
-        ? TriangleAlert
-        : Info;
+  const Icon = ICON_BY_VARIANT[variant];
 
   return (
     <Card tone="soft" className={`border-l-4 ${accent}`}>
