@@ -9,10 +9,11 @@ AI-focused code standards. Follow these when writing or modifying code.
 - Use type guards (`user is Admin`) and assertion functions (`asserts val is string`).
 - Never declare inline types in function parameters — use type aliases.
 - Required env vars must fail loudly — if missing, the app crashes, no defaults.
+- Never touch `database.types.ts` by hand — it is generated via `pnpm supabase:gen-types`.
 
 ## Clean code
 
-- Constants over magic values — extract semantic numbers/strings to named constants.
+- Constants over magic values — extract semantic numbers/strings to named constants or enums.
 - Short, single-responsibility functions — if you can describe it with "and", split it.
 - Guard clauses over nesting — early returns, happy path flat and last.
 - Descriptive names — state what and why, not how. No `data`, `temp`, `info`.
@@ -21,3 +22,11 @@ AI-focused code standards. Follow these when writing or modifying code.
 - Boring code — plain step-by-step over dense one-liners. Named intermediates document intent.
 - Always use braces for `if` statements.
 - When in doubt, optimize for the next reader, not the current writer.
+
+## Clean Architecture boundaries
+
+- Domain layer has zero framework imports — no Supabase, no Next.js, no `@supabase/ssr`. Only `zod` and own entities.
+- Use cases depend on repository **interfaces**, never concrete implementations.
+- Infrastructure implements those interfaces — Supabase for persistence, OpenAI for evaluation.
+- Delivery layer (`src/app/`) imports only container functions and DTOs — never repositories or use cases directly.
+- DI containers are constructed at call time with a client, never as module-level singletons.

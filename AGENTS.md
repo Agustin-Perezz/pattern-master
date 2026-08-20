@@ -1,6 +1,6 @@
 ## Project
 
-Next.js (App Router) starter with React 19, TypeScript strict mode, base-ui + shadcn components, Biome for lint/format, Playwright for E2E, and Sentry for monitoring. Clean Architecture with strict layering — domain pure, infrastructure swappable.
+PatternMaster — an interactive design-pattern practice app. Users refactor anti-pattern code into pattern-based solutions in a Monaco editor and receive LLM-driven evaluation (score, pattern detection, clean architecture feedback). Next.js 16 (App Router) with React 19, TypeScript strict mode, base-ui + shadcn components, Biome for lint/format, Playwright for E2E, Vitest for unit tests, and Sentry for monitoring. Clean Architecture with strict layering — domain pure, infrastructure swappable (Supabase for persistence, OpenAI for evaluation).
 
 ## Commands
 
