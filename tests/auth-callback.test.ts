@@ -21,3 +21,11 @@ test("auth callback with invalid code redirects to signin with auth_failed", asy
 
   await expect(page).toHaveURL(/\/signin\?error=auth_failed/);
 });
+
+test("home page strips a lingering OAuth code param from the URL", async ({
+  authenticatedPage: page,
+}) => {
+  await page.goto("/?code=abc123");
+
+  await expect(page).toHaveURL(/\/$/);
+});
