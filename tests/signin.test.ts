@@ -14,7 +14,7 @@ test("signin page renders all elements", async ({ page }) => {
     page.getByRole("button", { name: "Continue with Google" }),
   ).toBeVisible();
   await expect(
-    page.getByRole("button", { name: "Continue with Facebook" }),
+    page.getByRole("button", { name: "Continue with GitHub" }),
   ).toBeVisible();
 });
 

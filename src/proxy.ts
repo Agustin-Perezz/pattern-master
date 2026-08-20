@@ -35,6 +35,23 @@ export async function proxy(request: NextRequest) {
 
   const { data: claims, error } = await supabase.auth.getClaims();
 
+  // When the refresh token is invalid/expired (e.g. signed out elsewhere),
+  // getClaims returns an error. Clear the stale auth cookies so the browser
+  // stops retrying with the dead token — otherwise every request logs
+  // "Invalid Refresh Token: Refresh Token Not Found" and the user is stuck
+  // seeing stale auth state instead of being treated as logged out.
+  if (error) {
+    const authCookies = request.cookies
+      .getAll()
+      .filter(
+        (cookie) =>
+          cookie.name.startsWith("sb-") && cookie.name.endsWith("-auth-token"),
+      );
+    for (const cookie of authCookies) {
+      response.cookies.delete(cookie.name);
+    }
+  }
+
   const hasUser = !error && claims !== null;
 
   const isProtected = PROTECTED_PREFIXES.some((prefix) =>

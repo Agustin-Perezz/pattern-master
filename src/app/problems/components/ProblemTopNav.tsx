@@ -2,11 +2,18 @@ import Link from "next/link";
 
 import { ProblemTopNavActions } from "./ProblemTopNavActions";
 
+type TopNavUser = {
+  email: string;
+  name?: string;
+  initials: string;
+} | null;
+
 type ProblemTopNavProps = {
   subtitle?: string;
+  user?: TopNavUser;
 };
 
-export function ProblemTopNav({ subtitle }: ProblemTopNavProps) {
+export function ProblemTopNav({ subtitle, user = null }: ProblemTopNavProps) {
   return (
     <header className="flex h-[56px] shrink-0 items-center justify-between border-b border-hairline bg-canvas px-[16px] md:px-[24px]">
       <div className="flex min-w-0 items-center gap-[16px]">
@@ -29,7 +36,7 @@ export function ProblemTopNav({ subtitle }: ProblemTopNavProps) {
           </>
         ) : null}
       </div>
-      <ProblemTopNavActions />
+      <ProblemTopNavActions user={user} />
     </header>
   );
 }
