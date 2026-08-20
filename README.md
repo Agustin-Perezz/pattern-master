@@ -3,9 +3,9 @@
 [![Quality gate status](https://sonarcloud.io/api/project_badges/measure?project=Agustin-Perezz_pattern-master&metric=alert_status&token=488d382bfa2f8608447379c0b9438ba29f899556)](https://sonarcloud.io/summary/new_code?id=Agustin-Perezz_pattern-master)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Agustin-Perezz_pattern-master&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Agustin-Perezz_pattern-master)
 
-An interactive coding environment where developers practice software design patterns by refactoring anti-pattern code into clean, pattern-based solutions. Users browse seeded challenges (Strategy, Observer, Factory, Singleton, Adapter, Decorator), write their refactored code in a Monaco editor, and receive LLM-driven evaluation with a score (0–100), pattern-applied detection, and structured feedback on clean architecture violations.
+An interactive coding environment where developers practice software design patterns. Users refactor anti-pattern code into clean, pattern-based solutions. A Monaco editor lets users write their refactored code. An LLM evaluator gives a score (0–100), detects the target pattern, and returns structured feedback on clean architecture violations.
 
-Built on [Next.js](https://nextjs.org) 16 with Clean Architecture and strict layering. Domain entities and Zod invariant schemas sit at the core. Application use cases depend only on repository interfaces. Infrastructure provides Supabase-backed and OpenAI-backed implementations. The App Router delivery layer composes per-request DI containers, not module-level singletons. Dependencies point inward toward the domain, so framework and I/O concerns stay at the edges. The project takes a shift-left approach to quality: linting, type checking, static analysis, and E2E tests run on every push and pull request.
+Built on [Next.js](https://nextjs.org) 16 with Clean Architecture and strict layering. Domain entities and Zod invariant schemas sit at the core. Application use cases depend only on repository interfaces. Infrastructure provides Supabase-backed and OpenAI-backed implementations. The App Router delivery layer composes per-request DI containers, not module-level singletons. Dependencies point inward toward the domain. Framework and I/O concerns stay at the edges. The project takes a shift-left approach to quality: linting, type checking, static analysis, and E2E tests run on every push and pull request.
 
 ## Table of Contents
 
@@ -51,11 +51,11 @@ Built on [Next.js](https://nextjs.org) 16 with Clean Architecture and strict lay
 
 ## Features
 
-- **Challenge catalog** — Six seeded design-pattern challenges across Behavioral, Creational, and Structural categories. Each challenge includes a description, starter code (the anti-pattern), and the code to refactor.
-- **Monaco editor workspace** — A split-view workspace per challenge: challenge description on the left, Monaco editor on the right with TypeScript syntax highlighting and custom dark theme.
-- **LLM-driven evaluation** — Submit refactored code to the `/api/evaluate` endpoint, which calls OpenAI to score the solution (0–100), detect whether the target pattern was applied, and return structured feedback (praise, critical feedback, clean architecture violations).
+- **Challenge catalog** — Six seeded design-pattern challenges across Behavioral, Creational, and Structural categories. Each challenge has a description, starter code (the anti-pattern), and the code to refactor.
+- **Monaco editor workspace** — A split-view workspace per challenge. The challenge description is on the left. The Monaco editor is on the right, with TypeScript syntax highlighting and a custom dark theme.
+- **LLM-driven evaluation** — Submit refactored code to the `/api/evaluate` endpoint. OpenAI scores the solution (0–100), detects the target pattern, and returns structured feedback. The feedback includes praise, critical feedback, and clean architecture violations.
 - **Auth** — Magic link email sign-in plus OAuth (Google, GitHub). Supabase handles session management with cookie-based SSR auth. Protected routes require authentication via middleware.
-- **Submission persistence** — Every evaluation is persisted to Supabase with the user's ID, submitted code, score, and feedback JSON. RLS enforces owner-only access.
+- **Submission persistence** — Every evaluation is persisted to Supabase with the user ID, submitted code, score, and feedback JSON. RLS enforces owner-only access.
 
 ## Folder Structure
 
@@ -187,7 +187,7 @@ supabase status -o env
 #    Mailpit (email testing) at http://127.0.0.1:55324
 ```
 
-**Auth providers:** Email (magic link) works by default — Mailpit captures the emails. Google and GitHub OAuth need provider setup and secrets in `supabase/.env`. See [`docs/supabase.md`](./docs/supabase.md) "Auth providers local development".
+**Auth providers:** Email (magic link) works by default. Mailpit captures the emails. Google and GitHub OAuth need provider setup and secrets in `supabase/.env`. See [`docs/supabase.md`](./docs/supabase.md) "Auth providers local development".
 
 **Seeded challenges:** Six design-pattern challenges are seeded automatically on `supabase db reset`:
 
@@ -226,7 +226,7 @@ supabase db push --dry-run                         # Preview
 supabase db push                                   # Apply pending migrations
 ```
 
-> **Port conflicts between projects?** This project uses `env()` port indirection in `supabase/config.toml`. Each developer picks a distinct 5-port block via `supabase/.env` (gitignored). Defaults to 55321–55327. See [`docs/supabase.md`](./docs/supabase.md).
+> **Port conflicts between projects?** This project uses `env()` port indirection in `supabase/config.toml`. Each developer picks a distinct 5-port block via `supabase/.env` (gitignored). The default block is 55321–55327. See [`docs/supabase.md`](./docs/supabase.md).
 
 ## Scripts
 
@@ -264,10 +264,10 @@ src/
 
 The project has two complementary test layers, mapped to SonarCloud coverage:
 
-- **Unit tests (Vitest)** — cover the pure Clean Architecture core (use-cases, schemas/DTOs, mappers, utilities) and the server/Supabase code that browser coverage cannot see (Server Actions, route handlers, repositories). Fast feedback, runs locally with no Supabase.
-- **E2E tests (Playwright)** — Chromium-only, with V8 client-side coverage via the Monocart Reporter. Covers routes and client-rendered components end-to-end, including the challenge catalog, Monaco editor, and evaluation flow.
+- **Unit tests (Vitest)** — cover the pure Clean Architecture core: use-cases, schemas, DTOs, mappers, and utilities. They also cover the server code that browser coverage cannot see: Server Actions, route handlers, and repositories. Fast feedback. They run locally with no Supabase.
+- **E2E tests (Playwright)** — Chromium-only, with V8 client-side coverage via the Monocart Reporter. They cover routes and client-rendered components end-to-end. This includes the challenge catalog, the Monaco editor, and the evaluation flow.
 
-> **Why two layers?** Playwright's browser V8 coverage only captures client-side JS. Server Components, server actions, route handlers, middleware, and the Postgres/Supabase repositories execute on the server and are invisible to it. Vitest covers that surface. Playwright covers the rest. SonarCloud merges both LCOVs.
+> **Why two layers?** Playwright browser V8 coverage captures only client-side JS. Server Components, server actions, route handlers, middleware, and the Postgres repositories run on the server. They are invisible to browser coverage. Vitest covers that surface. Playwright covers the rest. SonarCloud merges both LCOV files.
 
 ### Unit tests
 
@@ -276,11 +276,11 @@ pnpm test:unit            # run once
 pnpm test:unit:coverage   # run with V8 coverage → coverage/unit/lcov.info
 ```
 
-Unit tests are co-located next to the source they cover (`src/**/*.test.ts`) and run in the Node environment (no jsdom). The use-case repository interfaces (`*.repository.interface.ts`) make them dependency-free — pass a fake/in-memory repository, no Supabase required.
+Unit tests are co-located next to the source they cover (`src/**/*.test.ts`). They run in the Node environment (no jsdom). The use-case repository interfaces (`*.repository.interface.ts`) make them dependency-free. Pass a fake or in-memory repository. No Supabase is necessary.
 
 ### Coverage scope: Clean Architecture core in, outer layers out
 
-SonarCloud's coverage gate targets **logic, not volume**. The new-code gate (Clean as You Code) already limits the burden to code you add or change, not legacy. On top of that, only the **Clean Architecture core** is in the coverage metric. The outer layers are excluded (in both `sonar.coverage.exclusions` and Vitest's `coverage.exclude`) because they are exercised by E2E, are framework/config glue, or are invisible to browser V8 coverage (Server Components, server actions).
+SonarCloud's coverage gate targets **logic, not volume**. The new-code gate (Clean as You Code) limits the burden to code you add or change, not legacy. Only the **Clean Architecture core** is in the coverage metric. The outer layers are excluded in both `sonar.coverage.exclusions` and Vitest's `coverage.exclude`. These layers are exercised by E2E, are framework glue, or are invisible to browser V8 coverage (Server Components, server actions).
 
 | In coverage scope (needs unit tests)       | Out of coverage scope (E2E / glue, no unit tests required) |
 | ------------------------------------------ | --------------------------------------------------------- |
@@ -291,7 +291,7 @@ SonarCloud's coverage gate targets **logic, not volume**. The new-code gate (Cle
 |                                            | DI containers, env/Supabase/auth factories, Sentry config, instrumentation |
 |                                            | App shell, route handlers, middleware, generated types, `errors.ts`, `utils.ts` |
 
-Excluded files are still analyzed for **bugs, smells, and duplication** — they do not count toward the coverage %. Write unit tests for new use-cases, entity logic, and mappers. The outer layers are covered by E2E. Tradeoff: new infrastructure/presentation code is smell/bug-gated, not coverage-gated.
+Excluded files are still analyzed for **bugs, smells, and duplication**. They do not count toward the coverage %. Write unit tests for new use-cases, entity logic, and mappers. The outer layers are covered by E2E. New infrastructure or presentation code is smell-gated and bug-gated, not coverage-gated.
 
 ### E2E tests
 
@@ -357,10 +357,10 @@ The `.github/workflows/ci.yml` workflow runs on push to `main` and on pull reque
 
 1. **lint** — Biome lint + TypeScript typecheck
 2. **test** — E2E tests (Playwright + local Supabase + V8 coverage via Monocart Reporter). Uploads the `test-report` (E2E coverage) artifact.
-3. **sonar** — SonarCloud static analysis + Quality Gate. **Runs after `test`**: it generates the Vitest unit coverage (`coverage/unit/lcov.info`), downloads the E2E coverage artifact (`coverage/tests/lcov.info`), then scans both. This makes sure that coverage is never missing from the report. PR decoration posts the gate status and inline issue comments to the PR.
+3. **sonar** — SonarCloud static analysis and Quality Gate. **Runs after `test`**. It generates the Vitest unit coverage (`coverage/unit/lcov.info`). Then it downloads the E2E coverage artifact (`coverage/tests/lcov.info`) and scans both files. This makes sure that coverage is never missing from the report. PR decoration posts the gate status and inline issue comments to the PR.
 4. **build** — Production build with Sentry source map upload (gated on lint + test)
 
-A **snyk** job runs in parallel. It scans dependencies for high-severity vulnerabilities and uploads the results as SARIF to GitHub Code Scanning. It can continue on error, so findings do not block the pipeline.
+A **snyk** job runs in parallel. It scans dependencies for high-severity vulnerabilities. Then it uploads the results as SARIF to GitHub Code Scanning. It can continue on error, so findings do not block the pipeline.
 
 ```
 lint ──┐
@@ -383,7 +383,7 @@ Configure these in **Settings → Secrets and variables → Actions**.
 | `SENTRY_PROJECT`    | Sentry project slug                    |
 | `SNYK_TOKEN`        | Snyk API token for vulnerability scans |
 
-> **Note:** `SONAR_TOKEN` is the only SonarCloud secret you need to add manually. `GITHUB_TOKEN` is provided automatically by GitHub Actions. No `SONAR_HOST_URL` is required for SonarCloud.
+> **Note:** `SONAR_TOKEN` is the only SonarCloud secret you must add manually. `GITHUB_TOKEN` is provided automatically by GitHub Actions. No `SONAR_HOST_URL` is necessary for SonarCloud.
 
 **Variables** (public values, safe to expose):
 
@@ -397,12 +397,12 @@ Configure these in **Settings → Secrets and variables → Actions**.
 
 Coverage and code quality are enforced as early as possible (shift-left):
 
-1. **IDE — SonarLint Connected Mode.** Install the SonarLint extension (VS Code / JetBrains). Bind it to SonarCloud organization `general-organization`, project `Agustin-Perezz_pattern-master`. This syncs the quality profile and surfaces issues in-editor before commit, in agreement with CI.
+1. **IDE — SonarLint Connected Mode.** Install the SonarLint extension (VS Code or JetBrains). Bind it to SonarCloud organization `general-organization`, project `Agustin-Perezz_pattern-master`. This syncs the quality profile. It surfaces issues in the editor before you commit, in agreement with CI.
 2. **Pre-push — unit tests.** The Husky `pre-push` hook runs `pnpm test:unit` before the slower E2E suite, so pure-logic regressions fail fast locally.
-3. **PR — analysis + decoration.** The `sonar` job runs on every PR. It posts the Quality Gate status and inline issue comments to the PR (PR decoration, enabled by the job's `pull-requests: write` permission). It reports only *new* issues introduced by the PR.
-4. **Merge gate — required check.** In **Settings → Branches → Branch protection rules** for `main`, add the **"SonarCloud Code Analysis"** check as a *required* status check so a failing Quality Gate blocks the merge.
+3. **PR — analysis and decoration.** The `sonar` job runs on every PR. It posts the Quality Gate status and inline issue comments to the PR. This is PR decoration, enabled by the job's `pull-requests: write` permission. It reports only *new* issues introduced by the PR.
+4. **Merge gate — required check.** In **Settings → Branches → Branch protection rules** for `main`, add the **"SonarCloud Code Analysis"** check as a *required* status check. A failing Quality Gate then blocks the merge.
 
-On SonarCloud, keep the **New Code Definition** set to `previous_version` and leave the Quality Gate on the default **Sonar way** (new-code coverage ≥ 80%, no new issues, new duplication ≤ 3%). Do not raise an overall-coverage condition until the unit suite matures. New-code-only keeps the gate achievable for server-action / route code that is covered by E2E or excluded.
+On SonarCloud, keep the **New Code Definition** set to `previous_version`. Leave the Quality Gate on the default **Sonar way** (new-code coverage ≥ 80%, no new issues, new duplication ≤ 3%). Do not raise an overall-coverage condition until the unit suite matures. New-code-only keeps the gate achievable for server-action or route code that E2E covers or that is excluded.
 
 ## Documentation
 
