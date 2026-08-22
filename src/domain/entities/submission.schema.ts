@@ -8,6 +8,7 @@ import {
 export const feedbackSchema = z.object({
   praise: z.string().nullable(),
   criticalFeedback: z.string().nullable(),
+  criticalFeedbackExample: z.string().nullable(),
   cleanArchitectureViolations: z.array(z.string()),
 });
 

@@ -15,6 +15,7 @@ function makeEvaluation(overrides: Partial<Evaluation> = {}): Evaluation {
     patternApplied: true,
     praise: "Good abstraction",
     criticalFeedback: "Missing interface",
+    criticalFeedbackExample: null,
     cleanArchitectureViolations: ["SRP violation"],
     ...overrides,
   };

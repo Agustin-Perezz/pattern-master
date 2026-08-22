@@ -15,6 +15,7 @@ const validData = {
   feedback: {
     praise: "Good structure",
     criticalFeedback: "Tight coupling",
+    criticalFeedbackExample: null,
     cleanArchitectureViolations: ["domain imports infra"],
   },
   createdAt: "2026-01-01T00:00:00.000Z",
@@ -97,6 +98,7 @@ describe("feedbackSchema", () => {
     const result = feedbackSchema.safeParse({
       praise: null,
       criticalFeedback: null,
+      criticalFeedbackExample: null,
       cleanArchitectureViolations: [],
     });
 
@@ -107,6 +109,7 @@ describe("feedbackSchema", () => {
     const result = feedbackSchema.safeParse({
       praise: "Good",
       criticalFeedback: null,
+      criticalFeedbackExample: null,
     });
 
     expect(result.success).toBe(false);

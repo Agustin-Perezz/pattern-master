@@ -13,6 +13,7 @@ const submissionRow = {
   feedback_json: {
     praise: "Good structure",
     criticalFeedback: "Add a private constructor",
+    criticalFeedbackExample: null,
     cleanArchitectureViolations: [],
   },
   created_at: "2026-01-01T00:00:00.000Z",
@@ -60,6 +61,7 @@ describe("submission.container", () => {
       feedback: {
         praise: "Good structure",
         criticalFeedback: "Add a private constructor",
+        criticalFeedbackExample: null,
         cleanArchitectureViolations: [],
       },
     });
