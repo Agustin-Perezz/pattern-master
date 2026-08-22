@@ -123,18 +123,6 @@ See [`AGENTS.md`](./AGENTS.md) for the engineering conventions that agents and c
    cp .env.example .env
    ```
 
-   Required environment variables (app crashes if missing — no defaults):
-
-   | Variable                                | Description                          |
-   | --------------------------------------- | ------------------------------------ |
-   | `NEXT_PUBLIC_SUPABASE_URL`              | Supabase project URL                 |
-   | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`  | Supabase publishable (anon) key      |
-   | `OPENAI_API_KEY`                        | OpenAI API key for LLM evaluation    |
-   | `NEXT_PUBLIC_SENTRY_DSN`                | Sentry DSN (client + server)         |
-   | `SENTRY_AUTH_TOKEN`                     | Sentry auth token for source map upload |
-   | `SENTRY_ORG`                            | Sentry organization slug              |
-   | `SENTRY_PROJECT`                        | Sentry project slug                   |
-
 2. Install dependencies and Playwright browsers:
 
    ```bash
