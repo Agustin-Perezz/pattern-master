@@ -17,8 +17,10 @@ type ProblemPageProps = {
 
 export default async function ProblemPage({ params }: ProblemPageProps) {
   const { slug } = await params;
-  const user = await requireUser();
-  const result = await getChallengeBySlug(slug);
+  const [user, result] = await Promise.all([
+    requireUser(),
+    getChallengeBySlug(slug),
+  ]);
 
   if (!result.found) {
     notFound();
