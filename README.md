@@ -117,10 +117,10 @@ See [`AGENTS.md`](./AGENTS.md) for the engineering conventions that agents and c
 
 ## Setup
 
-1. Copy `.env.example` to `.env.local` and fill in the values:
+1. Copy `.env.example` to `.env` and fill in the values:
 
    ```bash
-   cp .env.example .env.local
+   cp .env.example .env
    ```
 
    Required environment variables (app crashes if missing — no defaults):
@@ -142,13 +142,15 @@ See [`AGENTS.md`](./AGENTS.md) for the engineering conventions that agents and c
    pnpm test:install
    ```
 
-3. Start the Supabase local stack (see [Supabase Local Development](#supabase-local-development) below):
+3. Configure `supabase/.env` — set your port block and optional OAuth secrets. See [`docs/supabase.md`](./docs/supabase.md) "`supabase/.env` configuration".
+
+4. Start the Supabase local stack (see [Supabase Local Development](#supabase-local-development) below):
 
    ```bash
    supabase start
    ```
 
-4. Start the dev server:
+5. Start the dev server:
 
    ```bash
    pnpm dev
@@ -162,32 +164,7 @@ This project uses a **local Supabase stack** for development and tests. The app'
 
 **Prerequisites**: Docker running, Supabase CLI installed (`brew install supabase/tap/supabase` or see [CLI docs](https://supabase.com/docs/guides/local-development/cli/getting-started)).
 
-**Getting started:**
-
-```bash
-# 1. Start the local stack (Docker, ~1 GB first pull, ~10s after)
-supabase start
-
-# 2. Get your API keys
-supabase status -o env
-# Copy API_URL, ANON_KEY (publishable), SERVICE_ROLE_KEY (secret)
-
-# 3. Fill in .env.local (app dev) and .env.test (tests)
-# .env.local:
-#   NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:55321
-#   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<publishable key>
-#   OPENAI_API_KEY=<your-openai-api-key>
-# .env.test:
-#   SUPABASE_URL=http://127.0.0.1:55321
-#   SUPABASE_SERVICE_ROLE_KEY=<secret key>
-#   NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:55321
-#   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<publishable key>
-
-# 4. Studio GUI at http://127.0.0.1:55323
-#    Mailpit (email testing) at http://127.0.0.1:55324
-```
-
-**Auth providers:** Email (magic link) works by default. Mailpit captures the emails. Google and GitHub OAuth need provider setup and secrets in `supabase/.env`. See [`docs/supabase.md`](./docs/supabase.md) "Auth providers local development".
+For the full getting started guide, daily commands, schema changes, and remote deploy, see [`docs/supabase.md`](./docs/supabase.md).
 
 **Seeded challenges:** Six design-pattern challenges are seeded automatically on `supabase db reset`:
 
@@ -199,32 +176,6 @@ supabase status -o env
 | `one-config-to-rule-them-all`     | One Config to Rule Them All    | Creational  | Easy       | Singleton  |
 | `wrap-the-legacy-api`             | Wrap the Legacy API            | Structural  | Medium     | Adapter    |
 | `decorate-your-coffee`            | Decorate Your Coffee           | Structural  | Hard       | Decorator  |
-
-**Daily commands:**
-
-```bash
-supabase start               # Start stack
-supabase stop                # Stop (data persists)
-supabase stop --no-backup    # Stop and wipe all data
-supabase status -o env       # Show URLs + keys
-supabase db reset            # Wipe DB, replay migrations + seed
-```
-
-**Schema changes:**
-
-```bash
-supabase migration new <name>           # Create a blank migration
-supabase db reset                       # Apply all migrations to local DB
-pnpm supabase:gen-types                 # Regenerate types from local DB
-```
-
-**Deploy to remote** (when schema changes are ready for staging/prod):
-
-```bash
-supabase link --project-ref ypdlrfoioxdlcowdjpiz   # One-time per machine
-supabase db push --dry-run                         # Preview
-supabase db push                                   # Apply pending migrations
-```
 
 > **Port conflicts between projects?** This project uses `env()` port indirection in `supabase/config.toml`. Each developer picks a distinct 5-port block via `supabase/.env` (gitignored). The default block is 55321–55327. See [`docs/supabase.md`](./docs/supabase.md).
 
