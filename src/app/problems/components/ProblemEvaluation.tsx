@@ -3,6 +3,7 @@ import { Loader2 } from "lucide-react";
 import type { ChallengeProps } from "@/domain/entities/challenge.entity";
 import type { Evaluation } from "@/domain/entities/evaluation.schema";
 
+import { CodeBlock } from "./CodeBlock";
 import { FeedbackCard } from "./FeedbackCard";
 import { ScoreDial } from "./ScoreDial";
 
@@ -72,6 +73,9 @@ function EvaluationFeedback({ evaluation }: { evaluation: Evaluation }) {
       </FeedbackCard>
       <FeedbackCard variant="warning" title="Critical Feedback">
         {evaluation.criticalFeedback ?? "No critical feedback provided."}
+        {evaluation.criticalFeedbackExample && (
+          <CodeBlock code={evaluation.criticalFeedbackExample} />
+        )}
       </FeedbackCard>
       {evaluation.cleanArchitectureViolations.map((violation) => (
         <FeedbackCard key={violation} variant="warning" title="Violation">
