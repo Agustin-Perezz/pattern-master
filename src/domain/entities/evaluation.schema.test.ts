@@ -10,6 +10,7 @@ const validData = {
   patternApplied: true,
   praise: "Good structure",
   criticalFeedback: "Tight coupling",
+  criticalFeedbackExample: "class PaymentContext { ... }",
   cleanArchitectureViolations: ["domain imports infra"],
 };
 
@@ -27,11 +28,12 @@ describe("evaluationSchema", () => {
     expect(result.success).toBe(false);
   });
 
-  it("accepts null praise and criticalFeedback", () => {
+  it("accepts null praise, criticalFeedback, and criticalFeedbackExample", () => {
     const result = evaluationSchema.safeParse({
       ...validData,
       praise: null,
       criticalFeedback: null,
+      criticalFeedbackExample: null,
     });
 
     expect(result.success).toBe(true);

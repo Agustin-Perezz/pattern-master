@@ -12,6 +12,7 @@ const VALID_REQUEST = {
   feedback: {
     praise: "Good abstraction",
     criticalFeedback: "Missing interface",
+    criticalFeedbackExample: null,
     cleanArchitectureViolations: ["SRP violation"],
   },
 };
