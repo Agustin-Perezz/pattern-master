@@ -96,6 +96,9 @@ importers:
       husky:
         specifier: ^9.1.7
         version: 9.1.7
+      monaco-editor:
+        specifier: ^0.56.0
+        version: 0.56.0
       monocart-reporter:
         specifier: ^2.12.2
         version: 2.12.2
