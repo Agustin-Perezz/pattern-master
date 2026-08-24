@@ -1,9 +1,10 @@
 "use client";
 
-import { ChevronDown, Flame, LogOut } from "lucide-react";
+import { ChevronDown, Flame, LoaderCircle, LogOut } from "lucide-react";
 import Link from "next/link";
 
 import { Badge } from "@/components/opencode/badge";
+import { useAsyncAction } from "@/hooks/useAsyncAction";
 import { signOutAction } from "../actions";
 
 type ProblemTopNavActionsProps = {
@@ -28,14 +29,7 @@ export function ProblemTopNavActions({ user }: ProblemTopNavActionsProps) {
 
       {user ? (
         <div className="flex items-center gap-[8px]">
-          <button
-            type="button"
-            onClick={() => signOutAction()}
-            className="flex items-center gap-[6px] rounded-sm border border-hairline-strong bg-surface-card px-[12px] py-[6px] font-mono text-[14px] text-ink hover:bg-surface-dark-elevated"
-          >
-            <LogOut className="size-[14px]" aria-hidden />
-            Sign out
-          </button>
+          <SignOutButton />
           <div
             role="img"
             aria-label={`Signed in as ${user.email}`}
@@ -53,5 +47,25 @@ export function ProblemTopNavActions({ user }: ProblemTopNavActionsProps) {
         </Link>
       )}
     </div>
+  );
+}
+
+function SignOutButton() {
+  const { isPending, run } = useAsyncAction(signOutAction);
+
+  return (
+    <button
+      type="button"
+      disabled={isPending}
+      onClick={() => run()}
+      className="flex items-center gap-[6px] rounded-sm border border-hairline-strong bg-surface-card px-[12px] py-[6px] font-mono text-[14px] text-ink hover:bg-surface-dark-elevated disabled:opacity-50"
+    >
+      {isPending ? (
+        <LoaderCircle className="size-[14px] animate-spin" aria-hidden />
+      ) : (
+        <LogOut className="size-[14px]" aria-hidden />
+      )}
+      Sign out
+    </button>
   );
 }

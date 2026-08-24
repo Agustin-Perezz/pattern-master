@@ -1,9 +1,8 @@
 "use client";
 
 import { GitHubIcon, GoogleIcon } from "@/components/icons/brand-icons";
-import { Button } from "@/components/ui/button";
 import { OAuthProvider } from "@/domain/entities/oauth-provider.enum";
-import { signInWithOAuthAction } from "../actions";
+import { OAuthButton } from "./OAuthButton";
 
 type OAuthButtonConfig = {
   provider: OAuthProvider;
@@ -27,18 +26,13 @@ const OAUTH_BUTTONS: readonly OAuthButtonConfig[] = [
 export function OAuthButtons() {
   return (
     <div className="flex flex-col gap-[12px]">
-      {OAUTH_BUTTONS.map(({ provider, label, icon: Icon }) => (
-        <Button
+      {OAUTH_BUTTONS.map(({ provider, label, icon }) => (
+        <OAuthButton
           key={provider}
-          type="button"
-          variant="outline"
-          size="lg"
-          className="w-full"
-          onClick={() => signInWithOAuthAction(provider)}
-        >
-          <Icon />
-          Continue with {label}
-        </Button>
+          provider={provider}
+          label={label}
+          icon={icon}
+        />
       ))}
     </div>
   );
