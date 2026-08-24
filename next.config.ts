@@ -2,6 +2,10 @@ import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Enable Partial Prerendering: static shell is prerendered at build time,
+  // dynamic content (user nav via cookies()) streams in at request time.
+  // Paired with the Suspense boundary in page.tsx.
+  cacheComponents: true,
   // Emit client source maps for the production build so Playwright/Monocart
   // V8 coverage can resolve browser JS back to `src/`. Without this the LCOV
   // records `SF:` paths against bundled chunks and SonarCloud cannot map
