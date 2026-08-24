@@ -9,8 +9,14 @@ import { createSupabaseServerClient } from "@/lib/shared/infrastructure/supabase
 export async function getChallenges() {
   const supabase = createSupabasePublicClient();
   const container = createChallengeContainer(supabase);
-  const { challenges } = await container.list.execute();
-  return challenges.map((challenge) => challenge.toObject());
+
+  try {
+    const { challenges } = await container.list.execute();
+    return challenges.map((challenge) => challenge.toObject());
+  } catch (error) {
+    console.error("Failed to fetch challenges:", error);
+    return [];
+  }
 }
 
 export async function signOutAction() {
