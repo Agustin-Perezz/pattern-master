@@ -61,6 +61,7 @@
     "@vitest/coverage-v8": "^4.1.10",
     "dotenv": "^17.4.2",
     "husky": "^9.1.7",
+    "monaco-editor": "^0.56.0",
     "monocart-reporter": "^2.12.2",
     "nano-staged": "^1.0.2",
     "tailwindcss": "^4",
