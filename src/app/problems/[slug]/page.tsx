@@ -8,9 +8,7 @@ import {
 import { ProblemTopNav } from "../components/ProblemTopNav";
 import { ProblemTopNavActions } from "../components/ProblemTopNavActions";
 import { ProblemWorkspace } from "../components/ProblemWorkspace";
-import { getChallengeBySlug } from "./actions";
-
-export const dynamicParams = true;
+import { getChallengeBySlug } from "./queries";
 
 type ProblemPageProps = {
   params: Promise<{ slug: string }>;
