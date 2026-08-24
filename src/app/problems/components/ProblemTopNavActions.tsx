@@ -2,9 +2,9 @@
 
 import { ChevronDown, Flame, LoaderCircle, LogOut } from "lucide-react";
 import Link from "next/link";
-import { useTransition } from "react";
 
 import { Badge } from "@/components/opencode/badge";
+import { useAsyncAction } from "@/hooks/useAsyncAction";
 import { signOutAction } from "../actions";
 
 type ProblemTopNavActionsProps = {
@@ -51,13 +51,13 @@ export function ProblemTopNavActions({ user }: ProblemTopNavActionsProps) {
 }
 
 function SignOutButton() {
-  const [isPending, startTransition] = useTransition();
+  const { isPending, run } = useAsyncAction(signOutAction);
 
   return (
     <button
       type="button"
       disabled={isPending}
-      onClick={() => startTransition(() => signOutAction())}
+      onClick={() => run()}
       className="flex items-center gap-[6px] rounded-sm border border-hairline-strong bg-surface-card px-[12px] py-[6px] font-mono text-[14px] text-ink hover:bg-surface-dark-elevated disabled:opacity-50"
     >
       {isPending ? (
