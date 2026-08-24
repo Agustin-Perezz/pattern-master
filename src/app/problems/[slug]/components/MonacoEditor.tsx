@@ -1,6 +1,7 @@
 "use client";
 
-import type { BeforeMount } from "@monaco-editor/react";
+import type { BeforeMount, OnMount } from "@monaco-editor/react";
+import type { editor } from "monaco-editor";
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useState } from "react";
 
@@ -16,9 +17,14 @@ const Monaco = dynamic(() => import("@monaco-editor/react"), { ssr: false });
 export type MonacoEditorProps = {
   initialCode: string;
   onChange: (code: string) => void;
+  onMount: (editor: editor.IStandaloneCodeEditor) => void;
 };
 
-export function MonacoEditor({ initialCode, onChange }: MonacoEditorProps) {
+export function MonacoEditor({
+  initialCode,
+  onChange,
+  onMount,
+}: MonacoEditorProps) {
   const [code, setCode] = useState(initialCode);
 
   useEffect(() => {
@@ -46,6 +52,13 @@ export function MonacoEditor({ initialCode, onChange }: MonacoEditorProps) {
     });
   }, []);
 
+  const handleMount: OnMount = useCallback(
+    (editorInstance) => {
+      onMount(editorInstance);
+    },
+    [onMount],
+  );
+
   return (
     <Monaco
       height="100%"
@@ -54,6 +67,7 @@ export function MonacoEditor({ initialCode, onChange }: MonacoEditorProps) {
       value={code}
       onChange={handleChange}
       beforeMount={handleBeforeMount}
+      onMount={handleMount}
       theme={MONACO_THEME}
       options={EDITOR_OPTIONS}
     />

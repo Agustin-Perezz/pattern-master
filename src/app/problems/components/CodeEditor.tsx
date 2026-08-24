@@ -5,8 +5,10 @@ import { useCallback, useEffect, useState } from "react";
 
 import { Button } from "@/components/opencode/button";
 import type { ChallengeProps } from "@/domain/entities/challenge.entity";
+import { useVimMode } from "../hooks/useVimMode";
 
 import { CodeEditorBody } from "./CodeEditorBody";
+import { VimToggle } from "./VimToggle";
 
 type CodeEditorProps = {
   problem: ChallengeProps;
@@ -22,6 +24,7 @@ export function CodeEditor({
   error,
 }: CodeEditorProps) {
   const [code, setCode] = useState(problem.editorCode);
+  const { vimEnabled, toggleVim, statusBarRef, onEditorMount } = useVimMode();
 
   useEffect(() => {
     setCode(problem.editorCode);
@@ -40,8 +43,16 @@ export function CodeEditor({
       aria-label="Code editor"
       className="flex h-full min-h-0 w-full flex-col bg-surface-dark md:w-3/5"
     >
-      <EditorHeader file={problem.editorFile} />
-      <CodeEditorBody code={code} onChange={setCode} />
+      <EditorHeader file={problem.editorFile}>
+        <VimToggle enabled={vimEnabled} onToggle={toggleVim} />
+      </EditorHeader>
+      <CodeEditorBody code={code} onChange={setCode} onMount={onEditorMount} />
+      {vimEnabled && (
+        <div
+          ref={statusBarRef}
+          className="shrink-0 border-t border-surface-dark-elevated bg-surface-dark px-[16px] py-[4px] font-mono text-[13px] text-on-dark-mute"
+        />
+      )}
       <EditorFooter
         onReset={handleReset}
         onSubmit={handleSubmit}
@@ -52,13 +63,19 @@ export function CodeEditor({
   );
 }
 
-function EditorHeader({ file }: { file: string }) {
+type EditorHeaderProps = {
+  file: string;
+  children?: React.ReactNode;
+};
+
+function EditorHeader({ file, children }: EditorHeaderProps) {
   return (
     <div className="flex h-[40px] shrink-0 items-center gap-[8px] border-b border-surface-dark-elevated px-[16px]">
       <span className="flex items-center gap-[8px] rounded-sm bg-surface-dark-elevated px-[12px] py-[4px] font-mono text-[14px] text-on-dark">
         <span className="size-[8px] rounded-full bg-warning" aria-hidden />
         {file}
       </span>
+      {children}
     </div>
   );
 }
