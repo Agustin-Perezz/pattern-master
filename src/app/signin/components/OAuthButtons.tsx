@@ -1,5 +1,8 @@
 "use client";
 
+import { LoaderCircle } from "lucide-react";
+import { useTransition } from "react";
+
 import { GitHubIcon, GoogleIcon } from "@/components/icons/brand-icons";
 import { Button } from "@/components/ui/button";
 import { OAuthProvider } from "@/domain/entities/oauth-provider.enum";
@@ -28,18 +31,37 @@ export function OAuthButtons() {
   return (
     <div className="flex flex-col gap-[12px]">
       {OAUTH_BUTTONS.map(({ provider, label, icon: Icon }) => (
-        <Button
+        <OAuthButton
           key={provider}
-          type="button"
-          variant="outline"
-          size="lg"
-          className="w-full"
-          onClick={() => signInWithOAuthAction(provider)}
-        >
-          <Icon />
-          Continue with {label}
-        </Button>
+          provider={provider}
+          label={label}
+          Icon={Icon}
+        />
       ))}
     </div>
+  );
+}
+
+type OAuthButtonProps = {
+  provider: OAuthProvider;
+  label: string;
+  Icon: () => React.ReactElement;
+};
+
+function OAuthButton({ provider, label, Icon }: OAuthButtonProps) {
+  const [isPending, startTransition] = useTransition();
+
+  return (
+    <Button
+      type="button"
+      variant="outline"
+      size="lg"
+      className="w-full"
+      disabled={isPending}
+      onClick={() => startTransition(() => signInWithOAuthAction(provider))}
+    >
+      {isPending ? <LoaderCircle className="animate-spin" /> : <Icon />}
+      Continue with {label}
+    </Button>
   );
 }
