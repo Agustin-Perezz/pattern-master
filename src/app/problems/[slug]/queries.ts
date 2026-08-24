@@ -1,11 +1,9 @@
-"use server";
-
 import { ChallengeNotFoundError } from "@/domain/entities/errors";
 import { createChallengeContainer } from "@/lib/containers/challenge.container";
-import { createSupabaseServerClient } from "@/lib/shared/infrastructure/supabase.server";
+import { createSupabasePublicClient } from "@/lib/shared/infrastructure/supabase.public";
 
 export async function getChallengeBySlug(slug: string) {
-  const supabase = await createSupabaseServerClient();
+  const supabase = createSupabasePublicClient();
   const container = createChallengeContainer(supabase);
 
   try {

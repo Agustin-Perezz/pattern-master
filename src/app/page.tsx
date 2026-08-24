@@ -4,12 +4,10 @@ import {
   getUser,
   getUserInitials,
 } from "@/lib/shared/infrastructure/auth.server";
-import { getChallenges } from "./problems/actions";
 import { ProblemBrowser } from "./problems/components/ProblemBrowser";
 import { ProblemTopNav } from "./problems/components/ProblemTopNav";
 import { ProblemTopNavActions } from "./problems/components/ProblemTopNavActions";
-
-export const revalidate = 3600;
+import { getChallenges } from "./problems/queries";
 
 export default async function HomePage() {
   const challenges = await getChallenges();
