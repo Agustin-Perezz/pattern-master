@@ -6,6 +6,7 @@ import {
 } from "@/lib/shared/infrastructure/auth.server";
 
 import { ProblemTopNav } from "../components/ProblemTopNav";
+import { ProblemTopNavActions } from "../components/ProblemTopNavActions";
 import { ProblemWorkspace } from "../components/ProblemWorkspace";
 import { getChallengeBySlug } from "./actions";
 
@@ -35,7 +36,9 @@ export default async function ProblemPage({ params }: ProblemPageProps) {
 
   return (
     <div className="flex h-dvh flex-col overflow-hidden bg-canvas">
-      <ProblemTopNav subtitle={challenge.challenge} user={topNavUser} />
+      <ProblemTopNav subtitle={challenge.challenge}>
+        <ProblemTopNavActions user={topNavUser} />
+      </ProblemTopNav>
       <main className="flex min-h-0 flex-1 flex-col md:flex-row">
         <ProblemWorkspace problem={challenge} />
       </main>
