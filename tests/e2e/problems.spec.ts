@@ -12,7 +12,7 @@ const CHALLENGE_TITLES = [
 test("problems page renders all seeded challenges from the database", async ({
   page,
 }) => {
-  await page.goto("/problems");
+  await page.goto("/");
 
   for (const title of CHALLENGE_TITLES) {
     await expect(
@@ -22,7 +22,7 @@ test("problems page renders all seeded challenges from the database", async ({
 });
 
 test("problems page filters challenges by difficulty", async ({ page }) => {
-  await page.goto("/problems");
+  await page.goto("/");
 
   await expect(
     page.getByRole("heading", { name: "Decorate Your Coffee", level: 3 }),
