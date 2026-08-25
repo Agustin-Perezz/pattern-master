@@ -1,6 +1,6 @@
 import type { editor } from "monaco-editor";
 
-import { MonacoEditor } from "../[slug]/components/MonacoEditor";
+import { MonacoEditor } from "./MonacoEditor";
 
 type CodeEditorBodyProps = {
   code: string;

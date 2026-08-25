@@ -1,11 +1,10 @@
 import Link from "next/link";
 
 type ProblemTopNavProps = {
-  subtitle?: string;
   children?: React.ReactNode;
 };
 
-export function ProblemTopNav({ subtitle, children }: ProblemTopNavProps) {
+export function ProblemTopNav({ children }: ProblemTopNavProps) {
   return (
     <header className="flex h-[56px] shrink-0 items-center justify-between border-b border-hairline bg-canvas px-[16px] md:px-[24px]">
       <div className="flex min-w-0 items-center gap-[16px]">
@@ -17,16 +16,6 @@ export function ProblemTopNav({ subtitle, children }: ProblemTopNavProps) {
           PatternMaster
           <span className="text-mute">]</span>
         </Link>
-        {subtitle ? (
-          <>
-            <span aria-hidden className="hidden text-hairline-strong sm:inline">
-              |
-            </span>
-            <span className="hidden truncate font-mono text-[14px] text-mute sm:inline">
-              Challenge: {subtitle}
-            </span>
-          </>
-        ) : null}
       </div>
       {children}
     </header>
