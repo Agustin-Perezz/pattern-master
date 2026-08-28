@@ -201,12 +201,12 @@ src/
 
 ## Testing
 
-The project has two complementary test layers, mapped to SonarCloud coverage:
+The project has two complementary test layers:
 
-- **Unit tests (Vitest)** — cover the pure Clean Architecture core: use-cases, schemas, DTOs, mappers, and utilities. They also cover the server code that browser coverage cannot see: Server Actions, route handlers, and repositories. Fast feedback. They run locally with no Supabase.
-- **E2E tests (Playwright)** — Chromium-only, with V8 client-side coverage via the Monocart Reporter. They cover routes and client-rendered components end-to-end. This includes the challenge catalog, the Monaco editor, and the evaluation flow.
+- **Unit tests (Vitest)** — cover the pure Clean Architecture core: use-cases, entity validation, mappers. Fast feedback, runs locally with no Supabase. Feeds `coverage/unit/lcov.info` to SonarCloud.
+- **E2E tests (Playwright)** — Chromium-only, with V8 client-side coverage via the Monocart Reporter for local debugging. They cover routes and client-rendered components end-to-end. This includes the challenge catalog, the Monaco editor, and the evaluation flow. Not fed to SonarCloud.
 
-> **Why two layers?** Playwright browser V8 coverage captures only client-side JS. Server Components, server actions, route handlers, middleware, and the Postgres repositories run on the server. They are invisible to browser coverage. Vitest covers that surface. Playwright covers the rest. SonarCloud merges both LCOV files.
+> **Why two layers?** Playwright browser V8 coverage captures only client-side JS. Server Components, server actions, route handlers, middleware, and the Postgres repositories run on the server. They are invisible to browser coverage. Vitest covers the domain core. Playwright covers the client surface. SonarCloud gates only the unit coverage — the code where bugs actually hide.
 
 ### Unit tests
 
@@ -219,7 +219,9 @@ Unit tests are co-located next to the source they cover (`src/**/*.test.ts`). Th
 
 ### Coverage scope: Clean Architecture core in, outer layers out
 
-SonarCloud's coverage gate targets **logic, not volume**. The new-code gate (Clean as You Code) limits the burden to code you add or change, not legacy. Only the **Clean Architecture core** is in the coverage metric. The outer layers are excluded in both `sonar.coverage.exclusions` and Vitest's `coverage.exclude`. These layers are exercised by E2E, are framework glue, or are invisible to browser V8 coverage (Server Components, server actions).
+**Why this approach.** In Next.js App Router, most code runs on the server (Server Components, server actions, route handlers). Browser V8 coverage from Playwright cannot see that code. Feeding E2E coverage to SonarCloud produced an inflated denominator and a long exclusion list that drifted as the project grew. The solution: gate only the code that Vitest can cover and where bugs actually hide — the Clean Architecture core. The scope is set once in `vitest.config.ts` `coverage.include`, not maintained through exclusion globs. E2E coverage stays local for debugging. This keeps the gate meaningful and the maintenance at zero.
+
+SonarCloud's coverage gate targets **logic, not volume**. The new-code gate (Clean as You Code) limits the burden to code you add or change, not legacy. On top of that, only the **Clean Architecture core** is in the coverage metric. The scope is narrowed at the source — `vitest.config.ts` `coverage.include` lists only the three core paths — so there is no exclusion list to maintain. New outer files land outside coverage by default. `sonar.coverage.exclusions` in `sonar-project.properties` mirrors that same scope so the SonarCloud denominator agrees.
 
 | In coverage scope (needs unit tests)       | Out of coverage scope (E2E / glue, no unit tests required) |
 | ------------------------------------------ | --------------------------------------------------------- |
@@ -230,7 +232,7 @@ SonarCloud's coverage gate targets **logic, not volume**. The new-code gate (Cle
 |                                            | DI containers, env/Supabase/auth factories, Sentry config, instrumentation |
 |                                            | App shell, route handlers, middleware, generated types, `errors.ts`, `utils.ts` |
 
-Excluded files are still analyzed for **bugs, smells, and duplication**. They do not count toward the coverage %. Write unit tests for new use-cases, entity logic, and mappers. The outer layers are covered by E2E. New infrastructure or presentation code is smell-gated and bug-gated, not coverage-gated.
+Excluded files are still analyzed for **bugs, smells, and duplication**. They do not count toward the coverage %. Write unit tests for new use-cases, entity logic, and mappers. The outer layers are covered by E2E. Tradeoff: new infrastructure or presentation code is smell-gated and bug-gated, not coverage-gated.
 
 ### E2E tests
 
@@ -279,7 +281,7 @@ All tests import `test` and `expect` from `_shared/app-fixtures` (not directly f
 | LCOV (unit)   | `./coverage/unit/lcov.info`                      |
 | Cobertura XML | `./coverage/tests/cobertura/code-coverage.cobertura.xml` |
 
-SonarCloud reads both LCOV files (`sonar.*.lcov.reportPaths=coverage/unit/lcov.info,coverage/tests/lcov.info`) so unit + E2E coverage feed a single analysis.
+SonarCloud reads only the unit LCOV (`sonar.*.lcov.reportPaths=coverage/unit/lcov.info`). E2E coverage reports are kept locally for debugging but not fed to Sonar — the denominator stays on the Clean Architecture core.
 
 ## Git Hooks
 
@@ -295,16 +297,16 @@ Hooks are installed automatically via the `prepare` script when running `pnpm in
 The `.github/workflows/ci.yml` workflow runs on push to `main` and on pull requests:
 
 1. **lint** — Biome lint + TypeScript typecheck
-2. **test** — E2E tests (Playwright + local Supabase + V8 coverage via Monocart Reporter). Uploads the `test-report` (E2E coverage) artifact.
-3. **sonar** — SonarCloud static analysis and Quality Gate. **Runs after `test`**. It generates the Vitest unit coverage (`coverage/unit/lcov.info`). Then it downloads the E2E coverage artifact (`coverage/tests/lcov.info`) and scans both files. This makes sure that coverage is never missing from the report. PR decoration posts the gate status and inline issue comments to the PR.
-4. **build** — Production build with Sentry source map upload (gated on lint + test)
+2. **unit-test** — Vitest unit tests with V8 coverage (`coverage/unit/lcov.info`). Uploads the coverage artifact.
+3. **sonar** — SonarCloud static analysis and Quality Gate. **Runs after `unit-test`**: it downloads the coverage artifact (`coverage/unit/lcov.info`), then scans. This makes sure that coverage is never missing from the report. PR decoration posts the gate status and inline issue comments to the PR.
+4. **test** — E2E tests (Playwright + local Supabase). **Runs after `sonar`**: static analysis and the coverage gate pass before the slow E2E suite starts.
+5. **build** — Production build with Sentry source map upload (gated on lint + test)
 
 A **snyk** job runs in parallel. It scans dependencies for high-severity vulnerabilities. Then it uploads the results as SARIF to GitHub Code Scanning. It can continue on error, so findings do not block the pipeline.
 
 ```
-lint ──┐
-       ├──> build
-test ──┼──> sonar
+lint ──────────────────────────┐
+unit-test ──> sonar ──> test ──┼──> build
 snyk
 ```
 
