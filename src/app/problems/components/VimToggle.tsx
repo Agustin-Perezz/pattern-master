@@ -28,3 +28,16 @@ export function VimToggle({ enabled, onToggle }: VimToggleProps) {
     </button>
   );
 }
+
+type VimStatusBarProps = {
+  statusBarRef: React.RefObject<HTMLDivElement | null>;
+};
+
+export function VimStatusBar({ statusBarRef }: VimStatusBarProps) {
+  return (
+    <div
+      ref={statusBarRef}
+      className="shrink-0 border-t border-surface-dark-elevated bg-surface-dark px-[16px] py-[4px] font-mono text-[13px] text-on-dark-mute"
+    />
+  );
+}
