@@ -16,7 +16,7 @@ export default defineConfig({
     // avoids Server Component / RSC rendering constraints.
     environment: "node",
     globals: true,
-    include: ["src/**/*.test.ts"],
+    include: ["src/**/*.test.ts", "evals/**/*.test.ts"],
     coverage: {
       provider: "v8",
       reporter: ["text", "html", "lcov"],
