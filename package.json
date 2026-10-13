@@ -15,6 +15,9 @@
     "test:ui": "playwright test --ui",
     "test:ci": "playwright test",
     "test:install": "playwright install --with-deps chromium",
+    "eval": "sh -c 'npx --yes promptfoo@0.124.1 eval -c evals/promptfooconfig.ts --env-file .env --no-cache --repeat ${EVAL_REPEAT:-5} --output ${EVAL_OUTPUT:-evals/results/latest.json}; status=$?; tsx evals/lib/postprocess.ts ${EVAL_OUTPUT:-evals/results/latest.json}; exit $status'",
+    "eval:smoke": "sh -c 'npx --yes promptfoo@0.124.1 eval -c evals/promptfooconfig.ts --env-file .env --no-cache --repeat 1 --filter-first-n 1 --output evals/results/smoke.json; status=$?; tsx evals/lib/postprocess.ts evals/results/smoke.json; exit $status'",
+    "eval:view": "npx --yes promptfoo@0.124.1 view",
     "test:unit": "vitest run",
     "test:unit:coverage": "vitest run --coverage",
     "test:show-report": "npx monocart show-report ./coverage/tests/monocart-report.html",
@@ -65,6 +68,7 @@
     "monocart-reporter": "^2.12.2",
     "nano-staged": "^1.0.2",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5",
     "vitest": "^4.1.10"
   }
