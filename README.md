@@ -22,6 +22,7 @@ Built on [Next.js](https://nextjs.org) 16 with Clean Architecture and strict lay
   - [Prerequisites](#prerequisites)
   - [Test Structure](#test-structure)
   - [Coverage Reports](#coverage-reports)
+- [Prompt evaluation (evals)](#prompt-evaluation-evals)
 - [Git Hooks](#git-hooks)
 - [CI (GitHub Actions)](#ci-github-actions)
   - [Required GitHub Configuration](#required-github-configuration)
@@ -68,6 +69,7 @@ pattern-master/
 │   ├── architecture.md           # Clean Architecture concepts
 │   ├── supabase.md               # Supabase local dev operations
 │   └── development-guidelines.md # TypeScript and clean code standards
+├── evals/                        # promptfoo hybrid harness for the LLM evaluator
 ├── public/                       # Static assets served at root
 ├── src/
 │   ├── domain/                   # Pure entities + Zod invariant schemas (zero framework deps)
@@ -185,6 +187,9 @@ For the full getting started guide, daily commands, schema changes, and remote d
 | `pnpm test:unit:coverage` | Run Vitest with V8 coverage       |
 | `pnpm test:show-report`     | Open Monocart HTML test report   |
 | `pnpm coverage:show-report` | Open V8 coverage report          |
+| `pnpm eval`                 | Run promptfoo evals for all prompt versions |
+| `pnpm eval:smoke`           | Run a 1-test promptfoo pipeline check |
+| `pnpm eval:view`            | Open the promptfoo web UI (port 15500) |
 
 ## Architecture
 
@@ -282,6 +287,21 @@ All tests import `test` and `expect` from `_shared/app-fixtures` (not directly f
 | Cobertura XML | `./coverage/tests/cobertura/code-coverage.cobertura.xml` |
 
 SonarCloud reads only the unit LCOV (`sonar.*.lcov.reportPaths=coverage/unit/lcov.info`). E2E coverage reports are kept locally for debugging but not fed to Sonar — the denominator stays on the Clean Architecture core.
+
+## Prompt evaluation (evals)
+
+The `evals/` harness measures the LLM evaluator with [promptfoo](https://promptfoo.dev). It tests the real production evaluator, never a parallel copy. See [`evals/README.md`](./evals/README.md) for the full method.
+
+| Prompt | Accuracy (in range) | MAE (points) | Avg std dev (points) | Schema valid | p95 latency (ms) | Cost per eval (USD) |
+| ------ | ------------------- | ------------ | -------------------- | ------------ | ---------------- | ------------------- |
+| v1     | 36.1%               | 19.7         | 4.7                  | 100.0%       | 2993             | $0.000157           |
+| v2     | 83.3%               | 2.1          | 5.4                  | 100.0%       | 2413             | $0.000166           |
+
+The run used 36 labelled cases, 5 runs per case, and 2 prompt versions: 360 calls in total. It used `gpt-4o-mini`. It returned 0 errors and 100 percent schema validity.
+
+`v1` is the original evaluator prompt. `v2` is a stricter rubric with an explicit point split. The stricter rubric is much more accurate and has a much lower error, for about the same cost and latency.
+
+Run the harness with `pnpm eval`. The command makes paid OpenAI calls.
 
 ## Git Hooks
 
