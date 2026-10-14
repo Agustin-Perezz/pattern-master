@@ -6,6 +6,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 const VIM_MODE_STORAGE_KEY = "patternmaster:vim-mode";
 const MONACO_VIM_CDN =
   "https://unpkg.com/monaco-vim@0.4.4/dist/monaco-vim.umd.js";
+const VIM_LOAD_ERROR_MESSAGE = "Failed to load Vim mode";
 
 type VimAdapter = { dispose: () => void };
 
@@ -84,7 +85,7 @@ export function useVimMode(): UseVimModeReturn {
 
   useEffect(() => {
     if (!editorReady) return;
-    loadMonacoVim();
+    void loadMonacoVim();
   }, [editorReady]);
 
   const toggleVim = useCallback(() => {
@@ -107,13 +108,19 @@ export function useVimMode(): UseVimModeReturn {
     if (!editorInstance || !statusNode) return;
 
     if (vimEnabled && !vimAdapterRef.current) {
-      loadMonacoVim().then((initVimMode) => {
-        if (!editorRef.current || !statusBarRef.current || !initVimMode) return;
-        vimAdapterRef.current = initVimMode(
-          editorRef.current,
-          statusBarRef.current,
-        );
-      });
+      loadMonacoVim()
+        .then((initVimMode) => {
+          if (!editorRef.current || !statusBarRef.current || !initVimMode) {
+            return;
+          }
+          vimAdapterRef.current = initVimMode(
+            editorRef.current,
+            statusBarRef.current,
+          );
+        })
+        .catch((error: unknown) => {
+          console.error(VIM_LOAD_ERROR_MESSAGE, error);
+        });
     }
   }, [vimEnabled]);
 
